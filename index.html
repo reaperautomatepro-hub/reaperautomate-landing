@@ -1566,11 +1566,11 @@
     var dp=' data-plano="'+nome.replace(/"/g,'')+'"';
     var altStyle='display:block;margin-top:10px;font-size:13px;color:#67e8f9;text-decoration:none;opacity:.92;';
     if(L.assinar){
-      return '<a class="plan-cta js-checkout" href="'+L.assinar+'"'+dp+' rel="noopener">Assinar →</a>'+
-             (L.pix?'<a class="js-checkout" href="'+L.pix+'"'+dp+' rel="noopener" style="'+altStyle+'">ou pagar à vista no Pix →</a>':'');
+      return '<a class="plan-cta js-checkout" href="'+L.assinar+'"'+dp+' data-tipo="assinatura" rel="noopener">Assinar →</a>'+
+             (L.pix?'<a class="js-checkout" href="'+L.pix+'"'+dp+' data-tipo="unico" rel="noopener" style="'+altStyle+'">ou pagar à vista no Pix →</a>':'');
     }
     if(L.pix){
-      return '<a class="plan-cta js-checkout" href="'+L.pix+'"'+dp+' rel="noopener">Garantir agora →</a>';
+      return '<a class="plan-cta js-checkout" href="'+L.pix+'"'+dp+' data-tipo="unico" rel="noopener">Garantir agora →</a>';
     }
     return '<a class="plan-cta" href="'+WA_FALLBACK+'" target="_blank" rel="noopener">Garantir agora →</a>';
   }
@@ -2646,20 +2646,21 @@ document.getElementById('apLogoArea').addEventListener('click', (e) => {
 <script>
 (function(){
   var PRE="https://assistente.reaperautomate.com/api/pre-cadastro";
+  var CHECKOUT="https://assistente.reaperautomate.com/api/checkout";
   var modal=document.getElementById('coModal'), form=document.getElementById('coForm');
   var elPlano=document.getElementById('coPlano'), elNome=document.getElementById('coNome'),
       elTel=document.getElementById('coTel'), elEmail=document.getElementById('coEmail'),
       btn=document.getElementById('coBtn'), elErr=document.getElementById('coErr');
-  var destino='';
+  var destino='', destinoTipo='unico';
   function erro(msg, campo){ elErr.textContent=msg; elErr.style.display='block'; if(campo){ campo.focus(); campo.style.borderColor='rgba(255,107,107,.6)'; } }
   function limpaErro(){ elErr.style.display='none'; [elNome,elTel,elEmail].forEach(function(c){ c.style.borderColor='rgba(255,255,255,.12)'; }); }
-  function abrir(url, plano){ destino=url; elPlano.textContent=plano||''; limpaErro(); modal.style.display='flex'; setTimeout(function(){elNome.focus();},60); }
+  function abrir(url, plano, tipo){ destino=url; destinoTipo=tipo||'unico'; elPlano.textContent=plano||''; limpaErro(); modal.style.display='flex'; setTimeout(function(){elNome.focus();},60); }
   function fechar(){ modal.style.display='none'; btn.disabled=false; btn.textContent='Continuar pro pagamento →'; }
   // intercepta os botões de compra (delegação — funciona com os cards gerados dinamicamente)
   document.addEventListener('click', function(e){
     var a=e.target.closest('.js-checkout'); if(!a) return;
     e.preventDefault();
-    abrir(a.getAttribute('href'), a.getAttribute('data-plano'));
+    abrir(a.getAttribute('href'), a.getAttribute('data-plano'), a.getAttribute('data-tipo'));
   });
   document.getElementById('coCancel').addEventListener('click', fechar);
   modal.addEventListener('click', function(e){ if(e.target===modal) fechar(); });
@@ -2677,10 +2678,20 @@ document.getElementById('apLogoArea').addEventListener('click', (e) => {
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ return erro('E-mail inválido — confira o @ e o domínio (ex: voce@gmail.com).', elEmail); }
     btn.disabled=true; btn.textContent='Indo pro pagamento…';
     var payload={ nome:nome, telefone:tel, email:email, plano:elPlano.textContent };
-    var done=false, go=function(){ if(!done){ done=true; window.location.href=destino; } };
-    // salva o lead, mas NÃO bloqueia a venda se o endpoint falhar/demorar
-    setTimeout(go, 2500);
-    fetch(PRE,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).then(go).catch(go);
+    var done=false, go=function(url){ if(!done){ done=true; window.location.href=url; } };
+    var hdr={'Content-Type':'application/json'}, bodyStr=JSON.stringify(payload);
+    if(destinoTipo==='unico'){
+      // cria o checkout pela API (com notification_url -> notifica o webhook) e vai pro init_point
+      var fb=setTimeout(function(){ go(destino); }, 8000); // fallback: link estático se a API travar
+      fetch(CHECKOUT,{method:'POST',headers:hdr,body:bodyStr})
+        .then(function(r){ return r.json(); })
+        .then(function(d){ clearTimeout(fb); go(d && d.init_point ? d.init_point : destino); })
+        .catch(function(){ clearTimeout(fb); go(destino); });
+    } else {
+      // assinatura: salva o lead e segue pro link de preapproval (estático)
+      setTimeout(function(){ go(destino); }, 2500);
+      fetch(PRE,{method:'POST',headers:hdr,body:bodyStr}).then(function(){ go(destino); }).catch(function(){ go(destino); });
+    }
   });
 })();
 </script>
