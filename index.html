@@ -52,8 +52,17 @@
   .nav-brand img { width: 34px; height: 34px; object-fit: contain; filter: drop-shadow(0 0 10px rgba(33,125,230,.55)); }
   .nav-links { display: flex; gap: 28px; font-size: 13px; color: rgba(255,255,255,.7); }
   .nav-links a:hover { color: #fff; }
-  .nav-cta { padding: 9px 18px; border-radius: 10px; background: linear-gradient(135deg, #217DE6, #FF0080); color: #fff; font-weight: 600; font-size: 13px; transition: transform .15s, box-shadow .15s; }
+  /* destaque do link Planos — gradiente azul→roxo em negrito */
+  .nav-links a.nav-hot { font-weight: 800; background: linear-gradient(135deg, #4F9BFF, #A855F7); -webkit-background-clip: text; background-clip: text; color: transparent; transition: filter .15s; }
+  .nav-links a.nav-hot:hover { color: transparent; filter: brightness(1.25); }
+  .nav-cta { padding: 9px 18px; border-radius: 10px; background: linear-gradient(135deg, #217DE6, #FF0080); color: #fff; font-weight: 600; font-size: 13px; transition: transform .15s, box-shadow .15s; white-space: nowrap; }
   .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 8px 30px -8px rgba(255,0,128,.6); }
+  /* No celular os links de texto não cabem e geram scroll horizontal —
+     escondemos a fileira e deixamos só a marca + "Comprar agora". */
+  @media (max-width: 900px) {
+    .nav-links { display: none; }
+    .nav-inner { padding: 12px 18px; }
+  }
 
   /* hero */
   section { position: relative; z-index: 1; }
@@ -852,16 +861,13 @@
   <div class="nav-inner">
     <div class="nav-brand"><img src="logo.png" alt="Automate Pro" /><span>Automate Pro</span></div>
     <div class="nav-links">
-      <a href="#demo">Demo ao vivo</a>
       <a href="#como">Como funciona</a>
-      <a href="#produtos">Produtos</a>
+      <a href="#produtos">Módulos</a>
       <a href="#features">Telas</a>
-      <a href="#ia">IA</a>
-      <a href="#planos">Planos</a>
+      <a href="#planos" class="nav-hot">Planos</a>
       <a href="#sobre">Sobre</a>
-      <a href="#faq">FAQ</a>
     </div>
-    <a class="nav-cta" href="#cta">Comprar</a>
+    <a class="nav-cta" href="#planos">Comprar agora</a>
   </div>
 </nav>
 
@@ -872,21 +878,13 @@
     <div class="badge"><span class="dot"></span> V7.2 — Roda dentro do seu REAPER · Windows · Mac · Linux</div>
     <h1>Controle total de<br/><span class="gradient">VS no REAPER.</span></h1>
     <p class="lead">
-      A automação que transforma o REAPER no melhor multitrack de palco do mundo: regiões inteligentes,
-      troca de música sozinha, transposição de tom, pads e mixer. E você
+      A automação que transforma o REAPER no melhor controlador de multitrack do mundo: transições de regiões,
+      troca de música sozinha, transposição de tom, pads e mixer. E você ainda
       <b style="color:#fff;">controla o REAPER pelo celular</b> — sem encostar no PC, sem instalar app.
-    </p>
-    <p class="lead" style="font-size:14.5px; margin-top:-18px; color:rgba(255,255,255,.55);">
-      ⚠️ Funciona <b style="color:rgba(255,255,255,.8);">dentro do REAPER</b> (você já precisa ter o REAPER instalado). O celular controla o REAPER pela rede Wi-Fi local.
     </p>
     <div class="hero-ctas">
       <a class="btn-primary" href="#planos">Ver planos →</a>
       <a class="btn-ghost" href="#produtos">Conhecer os módulos ↓</a>
-    </div>
-    <div class="hero-stats">
-      <div><b>4 módulos + IA</b>uma automação completa</div>
-      <div><b>iOS · Android</b>controla pelo celular</div>
-      <div><b>100% offline</b>depois de ativar</div>
     </div>
   </div>
   <div class="hero-credit">Automate Pro ao vivo · equipe de louvor</div>
@@ -1133,7 +1131,7 @@
             <div class="prod-role" style="color:#67e8f9;">O cérebro ao vivo</div>
           </div>
         </div>
-        <p class="prod-desc">A barra de comando que doca no rodapé do REAPER. É quem comanda o show: você toca, ela cuida de tudo no tempo certo — sem tirar a mão do instrumento.</p>
+        <p class="prod-desc">Automação principal que se integra ao REAPER e te dá controle total do VS — troca de música, tom, pads e mixer no tempo certo.</p>
         <ul class="prod-feats">
           <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#67e8f9" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Auto Play + Auto Troca: transita de música sozinho</li>
           <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#67e8f9" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Transições de regiões com a Guia antecipada</li>
@@ -1151,7 +1149,7 @@
             <div class="prod-role" style="color:#d8b4fe;">Quem prepara tudo</div>
           </div>
         </div>
-        <p class="prod-desc">O trabalho de bastidor que dá liberdade no palco. Marca as seções da música e prepara o áudio — uma vez, com calma, em casa.</p>
+        <p class="prod-desc">Onde você monta a estrutura da música: cria as regiões nomeadas e coloridas que o Automate Pro usa pra trocar de seção sozinho.</p>
         <ul class="prod-feats">
           <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d8b4fe" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Cria regiões nomeadas e coloridas (Intro, Verso, Refrão…)</li>
           <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d8b4fe" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Endereça os canais de áudio automaticamente</li>
@@ -1168,7 +1166,7 @@
             <div class="prod-role" style="color:#fdba74;">Sua biblioteca inteligente</div>
           </div>
         </div>
-        <p class="prod-desc">Onde mora o seu repertório. Uma biblioteca visual com as capas das músicas, gerenciador de setlists e um modificador que cria medleys e ajusta músicas inteiras em segundos.</p>
+        <p class="prod-desc">Gerencia todo o repertório num só lugar — biblioteca visual, setlists e criação de medleys de qualquer música.</p>
         <ul class="prod-feats">
           <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fdba74" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Biblioteca visual com capas, tags e busca</li>
           <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fdba74" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Gerencia músicas e setlists num só lugar</li>
@@ -1192,7 +1190,7 @@
           <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6ee7b7" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Funciona em iOS, Android, tablet ou notebook</li>
           <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6ee7b7" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Vários celulares conectados ao mesmo tempo</li>
           <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6ee7b7" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Letras sincronizadas com a automação pro cantor</li>
-          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6ee7b7" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Biblioteca e routing editáveis pelo celular</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6ee7b7" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Biblioteca, Setlist e endereçamento editáveis pelo celular</li>
         </ul>
       </div>
 
@@ -1216,7 +1214,7 @@
     <div class="how-step">
       <div class="num">2</div>
       <h3>Prepara a música</h3>
-      <p>Semi-automático com o Criador de Regiões (você marca as seções) ou automático com a nuvem. Uma vez pronta, a música fica do jeito que você toca.</p>
+      <p>Em poucos cliques: marque as seções no Criador de Regiões ou deixe a nuvem montar tudo automático. Você prepara uma vez — rápido — e a música fica do jeito que você toca.</p>
     </div>
     <div class="how-step">
       <div class="num">3</div>
@@ -1508,7 +1506,7 @@
     <div class="sec-head-c">
       <div class="eyebrow"><span class="dot"></span> Planos</div>
       <h2>Escolha o seu e <span class="gradient">comece hoje.</span></h2>
-      <p>Licença por máquina, ativação simples e updates da linha V7 gratuitos. Cancele quando quiser nos planos mensais.</p>
+      <p>Licença por máquina, ativação simples e updates gratuitos. Cancele quando quiser nos planos mensais.</p>
     </div>
 
     <div style="text-align:center;">
@@ -1547,7 +1545,7 @@
     {k:'f_criador',     label:'Criador de Regiões'},
     {k:'f_web',         label:'Modo WEB (controle pelo celular)'},
     {k:'f_manager',     label:'Automate Manager'},
-    {k:'f_nuvem',       label:'Sincronização na nuvem'}
+    {k:'f_nuvem',       label:'Mapeamento automático (nuvem)'}
   ];
   var all=[], cycle='Mensal';
 
@@ -1659,6 +1657,11 @@
   </details>
 
   <details class="faq-item">
+    <summary>Preciso ter o REAPER instalado?</summary>
+    <p>Sim. O Automate Pro funciona <b>dentro do REAPER</b> — você já precisa ter o REAPER instalado. E não precisa ser a versão paga: o <b>REAPER gratuito</b> funciona normalmente. O celular controla o REAPER pela rede Wi-Fi local.</p>
+  </details>
+
+  <details class="faq-item">
     <summary>Preciso de internet pra usar?</summary>
     <p>Não. Só na primeira ativação da licença. Depois roda 100% offline — em palco, na igreja, no avião, no sítio. O Painel Web roda em LAN (rede local), não precisa de internet.</p>
   </details>
@@ -1680,7 +1683,7 @@
 
   <details class="faq-item">
     <summary>Recebo atualizações?</summary>
-    <p>Sim! <b>Todos os planos incluem as atualizações da linha V7</b>, sem custo extra. Você sempre vai ter a versão mais nova e estável.</p>
+    <p>Sim! <b>Todos os planos incluem as atualizações</b>, sem custo extra. Você sempre vai ter a versão mais nova e estável.</p>
   </details>
 
   <details class="faq-item">
@@ -1704,7 +1707,7 @@
 <!-- ====================================================== -->
 <section id="cta" class="cta">
   <h2>Sua liberdade na adoração <br/><span class="gradient">começa com 1 clique.</span></h2>
-  <p>Garante o Automate Pro V7.2. Licença por máquina + updates da linha V7 gratuitos. Não te serviu em 7 dias? Devolvo o dinheiro.</p>
+  <p>Garante o Automate Pro V7.2. Licença por máquina + updates gratuitos. Não te serviu em 7 dias? Devolvo o dinheiro.</p>
   <a class="btn-primary" href="#planos">Ver planos →</a>
   <p style="margin-top: 20px; font-size: 13px;">Dúvida na hora: <a href="https://assistente.reaperautomate.com" target="_blank" style="color:#67e8f9;">pergunte à IA 24/7</a> · ou fale comigo no <a href="https://wa.me/" style="color:#34d399;">WhatsApp</a></p>
 </section>
