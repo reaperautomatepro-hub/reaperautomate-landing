@@ -2677,21 +2677,15 @@ document.getElementById('apLogoArea').addEventListener('click', (e) => {
     if(tel.length<10 || tel.length>13){ return erro('WhatsApp inválido — inclua o DDD. Ex: 11 99999-8888', elTel); }
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ return erro('E-mail inválido — confira o @ e o domínio (ex: voce@gmail.com).', elEmail); }
     btn.disabled=true; btn.textContent='Indo pro pagamento…';
-    var payload={ nome:nome, telefone:tel, email:email, plano:elPlano.textContent };
+    var payload={ nome:nome, telefone:tel, email:email, plano:elPlano.textContent, tipo:destinoTipo };
     var done=false, go=function(url){ if(!done){ done=true; window.location.href=url; } };
-    var hdr={'Content-Type':'application/json'}, bodyStr=JSON.stringify(payload);
-    if(destinoTipo==='unico'){
-      // cria o checkout pela API (com notification_url -> notifica o webhook) e vai pro init_point
-      var fb=setTimeout(function(){ go(destino); }, 8000); // fallback: link estático se a API travar
-      fetch(CHECKOUT,{method:'POST',headers:hdr,body:bodyStr})
-        .then(function(r){ return r.json(); })
-        .then(function(d){ clearTimeout(fb); go(d && d.init_point ? d.init_point : destino); })
-        .catch(function(){ clearTimeout(fb); go(destino); });
-    } else {
-      // assinatura: salva o lead e segue pro link de preapproval (estático)
-      setTimeout(function(){ go(destino); }, 2500);
-      fetch(PRE,{method:'POST',headers:hdr,body:bodyStr}).then(function(){ go(destino); }).catch(function(){ go(destino); });
-    }
+    // cria o checkout (único OU assinatura) pela API — notifica o webhook e carimba a etiqueta;
+    // vai pro init_point. Fallback: link estático se a API travar.
+    var fb=setTimeout(function(){ go(destino); }, 9000);
+    fetch(CHECKOUT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
+      .then(function(r){ return r.json(); })
+      .then(function(d){ clearTimeout(fb); go(d && d.init_point ? d.init_point : destino); })
+      .catch(function(){ clearTimeout(fb); go(destino); });
   });
 })();
 </script>
