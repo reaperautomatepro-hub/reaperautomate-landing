@@ -1564,13 +1564,9 @@
     var nome=(p.nome||'').trim();
     var L=PLAN_LINKS[nome]||{};
     var dp=' data-plano="'+nome.replace(/"/g,'')+'"';
-    var altStyle='display:block;margin-top:10px;font-size:13px;color:#67e8f9;text-decoration:none;opacity:.92;';
-    if(L.assinar){
-      return '<a class="plan-cta js-checkout" href="'+L.assinar+'"'+dp+' data-tipo="assinatura" rel="noopener">Assinar →</a>'+
-             (L.pix?'<a class="js-checkout" href="'+L.pix+'"'+dp+' data-tipo="unico" rel="noopener" style="'+altStyle+'">ou pagar à vista no Pix →</a>':'');
-    }
-    if(L.pix){
-      return '<a class="plan-cta js-checkout" href="'+L.pix+'"'+dp+' data-tipo="unico" rel="noopener">Garantir agora →</a>';
+    var link=L.pix||L.assinar; // pagamento único (link estático = fallback)
+    if(link){
+      return '<a class="plan-cta js-checkout" href="'+link+'"'+dp+' data-tipo="unico" rel="noopener">Garantir agora →</a>';
     }
     return '<a class="plan-cta" href="'+WA_FALLBACK+'" target="_blank" rel="noopener">Garantir agora →</a>';
   }
@@ -1581,7 +1577,7 @@
     if(!list.length){ grid.innerHTML='<div class="plan-loading">Nenhum plano '+cycle.toLowerCase()+' disponível no momento.</div>'; return; }
     grid.innerHTML=list.map(function(p){
       var feat=/premium/i.test(p.nome||'') || (p.f_web&&p.f_manager&&p.f_nuvem);
-      var cyc = p.tempo==='Mensal'?'cobrado por mês' : p.tempo==='Anual'?'cobrado por ano' : 'pagamento único · vitalício';
+      var cyc = p.tempo==='Mensal'?'acesso por 1 mês' : p.tempo==='Anual'?'acesso por 1 ano' : 'pagamento único · vitalício';
       var sub='';
       if(p.tempo==='Anual'){ var m=(parseFloat(p.valor)||0)/12; sub='<div class="plan-cycle" style="color:#34d399;">≈ R$ '+m.toFixed(2).replace('.',',')+' por mês</div>'; }
       var feats=FEATS.map(function(f){ var on=!!p[f.k]; return '<li class="'+(on?'':'no')+'">'+ck(on)+' '+f.label+'</li>'; }).join('');
