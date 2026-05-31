@@ -1,0 +1,13 @@
+# Notas internas de desenvolvimento — não publicar
+NOTAS-DESENVOLVIMENTO.md
+
+# Sistema / editores
+.DS_Store
+Thumbs.db
+
+# Vercel
+.vercel
+
+# Artefatos de teste
+.playwright-mcp/
+*.log
