@@ -2637,6 +2637,7 @@ document.getElementById('apLogoArea').addEventListener('click', (e) => {
       <input id="coTel" type="tel" required autocomplete="tel" placeholder="WhatsApp com DDD (ex: 11 99999-8888)" style="width:100%;box-sizing:border-box;margin-bottom:12px;padding:13px 14px;background:#15151f;border:1px solid rgba(255,255,255,.12);border-radius:10px;color:#fff;font-size:14px;font-family:inherit;">
       <input id="coEmail" type="email" required autocomplete="email" placeholder="Seu melhor e-mail" style="width:100%;box-sizing:border-box;margin-bottom:14px;padding:13px 14px;background:#15151f;border:1px solid rgba(255,255,255,.12);border-radius:10px;color:#fff;font-size:14px;font-family:inherit;">
       <p style="margin:0 0 18px;font-size:12.5px;color:#E6B422;line-height:1.5;background:rgba(230,180,34,.08);border:1px solid rgba(230,180,34,.25);border-radius:9px;padding:10px 12px;">⚠️ Use <b>este mesmo e-mail</b> no pagamento — é por ele que sua licença é liberada e que você ativa no REAPER.</p>
+      <div id="coErr" style="display:none;margin:0 0 12px;font-size:12.5px;color:#ff8585;background:rgba(255,107,107,.08);border:1px solid rgba(255,107,107,.32);border-radius:9px;padding:9px 12px;line-height:1.45;"></div>
       <button id="coBtn" type="submit" style="width:100%;padding:14px;border:none;border-radius:10px;background:linear-gradient(135deg,#217DE6,#FF0080);color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;">Continuar pro pagamento →</button>
       <button id="coCancel" type="button" style="width:100%;margin-top:10px;padding:8px;background:none;border:none;color:#8b8b9e;font-size:12.5px;cursor:pointer;font-family:inherit;">cancelar</button>
     </form>
@@ -2647,9 +2648,12 @@ document.getElementById('apLogoArea').addEventListener('click', (e) => {
   var PRE="https://assistente.reaperautomate.com/api/pre-cadastro";
   var modal=document.getElementById('coModal'), form=document.getElementById('coForm');
   var elPlano=document.getElementById('coPlano'), elNome=document.getElementById('coNome'),
-      elTel=document.getElementById('coTel'), elEmail=document.getElementById('coEmail'), btn=document.getElementById('coBtn');
+      elTel=document.getElementById('coTel'), elEmail=document.getElementById('coEmail'),
+      btn=document.getElementById('coBtn'), elErr=document.getElementById('coErr');
   var destino='';
-  function abrir(url, plano){ destino=url; elPlano.textContent=plano||''; modal.style.display='flex'; setTimeout(function(){elNome.focus();},60); }
+  function erro(msg, campo){ elErr.textContent=msg; elErr.style.display='block'; if(campo){ campo.focus(); campo.style.borderColor='rgba(255,107,107,.6)'; } }
+  function limpaErro(){ elErr.style.display='none'; [elNome,elTel,elEmail].forEach(function(c){ c.style.borderColor='rgba(255,255,255,.12)'; }); }
+  function abrir(url, plano){ destino=url; elPlano.textContent=plano||''; limpaErro(); modal.style.display='flex'; setTimeout(function(){elNome.focus();},60); }
   function fechar(){ modal.style.display='none'; btn.disabled=false; btn.textContent='Continuar pro pagamento →'; }
   // intercepta os botões de compra (delegação — funciona com os cards gerados dinamicamente)
   document.addEventListener('click', function(e){
@@ -2660,10 +2664,19 @@ document.getElementById('apLogoArea').addEventListener('click', (e) => {
   document.getElementById('coCancel').addEventListener('click', fechar);
   modal.addEventListener('click', function(e){ if(e.target===modal) fechar(); });
   document.addEventListener('keydown', function(e){ if(e.key==='Escape' && modal.style.display==='flex') fechar(); });
+  form.addEventListener('input', limpaErro);
   form.addEventListener('submit', function(e){
     e.preventDefault();
+    limpaErro();
+    var nome=elNome.value.trim().replace(/\s+/g,' ');
+    var tel=elTel.value.replace(/\D/g,'');               // só números (converte qualquer coisa)
+    var email=elEmail.value.trim().toLowerCase();
+    // checagens antes de sair
+    if(nome.length<3 || nome.split(' ').filter(Boolean).length<2){ return erro('Digite seu nome completo (nome e sobrenome).', elNome); }
+    if(tel.length<10 || tel.length>13){ return erro('WhatsApp inválido — inclua o DDD. Ex: 11 99999-8888', elTel); }
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ return erro('E-mail inválido — confira o @ e o domínio (ex: voce@gmail.com).', elEmail); }
     btn.disabled=true; btn.textContent='Indo pro pagamento…';
-    var payload={ nome:elNome.value.trim(), telefone:elTel.value.trim(), email:elEmail.value.trim().toLowerCase(), plano:elPlano.textContent };
+    var payload={ nome:nome, telefone:tel, email:email, plano:elPlano.textContent };
     var done=false, go=function(){ if(!done){ done=true; window.location.href=destino; } };
     // salva o lead, mas NÃO bloqueia a venda se o endpoint falhar/demorar
     setTimeout(go, 2500);
