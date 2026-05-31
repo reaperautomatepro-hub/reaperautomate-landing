@@ -1561,14 +1561,18 @@
 
   // Botões de compra: recorrente tem "Assinar" + link de Pix embaixo; vitalício/único tem só um botão.
   function ctaHtml(p){
-    var L=PLAN_LINKS[(p.nome||'').trim()]||{};
+    var nome=(p.nome||'').trim();
+    var L=PLAN_LINKS[nome]||{};
+    var dp=' data-plano="'+nome.replace(/"/g,'')+'"';
     var altStyle='display:block;margin-top:10px;font-size:13px;color:#67e8f9;text-decoration:none;opacity:.92;';
     if(L.assinar){
-      return '<a class="plan-cta" href="'+L.assinar+'" target="_blank" rel="noopener">Assinar →</a>'+
-             (L.pix?'<a href="'+L.pix+'" target="_blank" rel="noopener" style="'+altStyle+'">ou pagar à vista no Pix →</a>':'');
+      return '<a class="plan-cta js-checkout" href="'+L.assinar+'"'+dp+' rel="noopener">Assinar →</a>'+
+             (L.pix?'<a class="js-checkout" href="'+L.pix+'"'+dp+' rel="noopener" style="'+altStyle+'">ou pagar à vista no Pix →</a>':'');
     }
-    var single=L.pix||L.assinar||WA_FALLBACK;
-    return '<a class="plan-cta" href="'+single+'" target="_blank" rel="noopener">Garantir agora →</a>';
+    if(L.pix){
+      return '<a class="plan-cta js-checkout" href="'+L.pix+'"'+dp+' rel="noopener">Garantir agora →</a>';
+    }
+    return '<a class="plan-cta" href="'+WA_FALLBACK+'" target="_blank" rel="noopener">Garantir agora →</a>';
   }
 
   function render(){
@@ -2616,6 +2620,54 @@ document.getElementById('apLogoArea').addEventListener('click', (e) => {
     } else {
       startAuto();
     }
+  });
+})();
+</script>
+
+<!-- ====================================================== -->
+<!-- MODAL DE CHECKOUT — coleta nome/WhatsApp/e-mail antes do Mercado Pago -->
+<!-- ====================================================== -->
+<div id="coModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(3,3,8,.8);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:20px;">
+  <div style="width:100%;max-width:430px;background:#0d0d14;border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:30px;box-shadow:0 24px 70px rgba(0,0,0,.55);">
+    <div id="coPlano" style="font-size:12.5px;color:#67e8f9;font-weight:600;margin-bottom:6px;letter-spacing:.3px;">Plano</div>
+    <h3 style="margin:0 0 6px;font-size:21px;color:#fff;font-weight:700;">Quase lá! 🎵</h3>
+    <p style="margin:0 0 20px;font-size:13.5px;color:#a0a0b0;line-height:1.55;">Preencha seus dados pra liberarmos sua licença <b style="color:#cfcfe0;">automaticamente</b> assim que o pagamento cair.</p>
+    <form id="coForm">
+      <input id="coNome" type="text" required autocomplete="name" placeholder="Nome completo" style="width:100%;box-sizing:border-box;margin-bottom:12px;padding:13px 14px;background:#15151f;border:1px solid rgba(255,255,255,.12);border-radius:10px;color:#fff;font-size:14px;font-family:inherit;">
+      <input id="coTel" type="tel" required autocomplete="tel" placeholder="WhatsApp com DDD (ex: 11 99999-8888)" style="width:100%;box-sizing:border-box;margin-bottom:12px;padding:13px 14px;background:#15151f;border:1px solid rgba(255,255,255,.12);border-radius:10px;color:#fff;font-size:14px;font-family:inherit;">
+      <input id="coEmail" type="email" required autocomplete="email" placeholder="Seu melhor e-mail" style="width:100%;box-sizing:border-box;margin-bottom:14px;padding:13px 14px;background:#15151f;border:1px solid rgba(255,255,255,.12);border-radius:10px;color:#fff;font-size:14px;font-family:inherit;">
+      <p style="margin:0 0 18px;font-size:12.5px;color:#E6B422;line-height:1.5;background:rgba(230,180,34,.08);border:1px solid rgba(230,180,34,.25);border-radius:9px;padding:10px 12px;">⚠️ Use <b>este mesmo e-mail</b> no pagamento — é por ele que sua licença é liberada e que você ativa no REAPER.</p>
+      <button id="coBtn" type="submit" style="width:100%;padding:14px;border:none;border-radius:10px;background:linear-gradient(135deg,#217DE6,#FF0080);color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;">Continuar pro pagamento →</button>
+      <button id="coCancel" type="button" style="width:100%;margin-top:10px;padding:8px;background:none;border:none;color:#8b8b9e;font-size:12.5px;cursor:pointer;font-family:inherit;">cancelar</button>
+    </form>
+  </div>
+</div>
+<script>
+(function(){
+  var PRE="https://assistente.reaperautomate.com/api/pre-cadastro";
+  var modal=document.getElementById('coModal'), form=document.getElementById('coForm');
+  var elPlano=document.getElementById('coPlano'), elNome=document.getElementById('coNome'),
+      elTel=document.getElementById('coTel'), elEmail=document.getElementById('coEmail'), btn=document.getElementById('coBtn');
+  var destino='';
+  function abrir(url, plano){ destino=url; elPlano.textContent=plano||''; modal.style.display='flex'; setTimeout(function(){elNome.focus();},60); }
+  function fechar(){ modal.style.display='none'; btn.disabled=false; btn.textContent='Continuar pro pagamento →'; }
+  // intercepta os botões de compra (delegação — funciona com os cards gerados dinamicamente)
+  document.addEventListener('click', function(e){
+    var a=e.target.closest('.js-checkout'); if(!a) return;
+    e.preventDefault();
+    abrir(a.getAttribute('href'), a.getAttribute('data-plano'));
+  });
+  document.getElementById('coCancel').addEventListener('click', fechar);
+  modal.addEventListener('click', function(e){ if(e.target===modal) fechar(); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape' && modal.style.display==='flex') fechar(); });
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    btn.disabled=true; btn.textContent='Indo pro pagamento…';
+    var payload={ nome:elNome.value.trim(), telefone:elTel.value.trim(), email:elEmail.value.trim().toLowerCase(), plano:elPlano.textContent };
+    var done=false, go=function(){ if(!done){ done=true; window.location.href=destino; } };
+    // salva o lead, mas NÃO bloqueia a venda se o endpoint falhar/demorar
+    setTimeout(go, 2500);
+    fetch(PRE,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).then(go).catch(go);
   });
 })();
 </script>
