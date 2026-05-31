@@ -730,7 +730,8 @@
     overflow:hidden;
   }
   .ia-chat-bar { display:flex; align-items:center; gap:10px; padding:14px 18px; border-bottom:1px solid rgba(255,255,255,.07); background:rgba(255,255,255,.02); }
-  .ia-chat-bar .av { width:30px; height:30px; border-radius:9px; background:linear-gradient(135deg,#217DE6,#67e8f9); display:grid; place-items:center; font-size:15px; }
+  .ia-chat-bar .av { width:32px; height:32px; border-radius:50%; overflow:hidden; flex-shrink:0; box-shadow:0 0 0 1px rgba(255,255,255,.15); }
+  .ia-chat-bar .av img { width:100%; height:100%; object-fit:cover; display:block; }
   .ia-chat-bar b { font-size:13.5px; }
   .ia-chat-bar .on { margin-left:auto; font-size:11px; color:#34d399; display:flex; align-items:center; gap:6px; }
   .ia-chat-bar .on::before { content:''; width:6px; height:6px; border-radius:999px; background:#34d399; box-shadow:0 0 8px #34d399; }
@@ -1419,25 +1420,25 @@
   <div class="wrap">
     <div class="ia-grid">
       <div class="ia-copy">
-        <div class="eyebrow"><span class="dot"></span> Exclusivo do Automate Pro</div>
-        <h2>Uma <span class="gradient">IA que conhece</span> cada botão do seu produto.</h2>
-        <p>Travou numa configuração às 23h de um sábado? O assistente oficial em <b style="color:#67e8f9">assistente.reaperautomate.com</b> responde tudo sobre a automação — treinado no manual completo, disponível 24 horas por dia.</p>
+        <div class="eyebrow"><span class="dot"></span> Conheça a Karol</div>
+        <h2>A <span class="gradient">Karol</span> conhece cada botão do seu produto.</h2>
+        <p>Travou numa configuração às 23h de um sábado? A <b style="color:#67e8f9">Karol</b>, nossa assistente em <b style="color:#67e8f9">assistente.reaperautomate.com</b>, responde tudo sobre a automação — treinada no manual completo, disponível 24 horas por dia.</p>
         <div class="ia-points">
           <div class="ia-point"><div class="pi">⚡</div><div><b>Resposta na hora</b><span>Sem ticket, sem fila, sem esperar o suporte acordar.</span></div></div>
           <div class="ia-point"><div class="pi">📖</div><div><b>Sabe do manual inteiro</b><span>Cada módulo, cada atalho, cada pegadinha de instalação.</span></div></div>
           <div class="ia-point"><div class="pi">🎯</div><div><b>Passo a passo de verdade</b><span>Te guia até resolver, do jeito do seu setup.</span></div></div>
         </div>
-        <a class="btn-primary" href="https://assistente.reaperautomate.com" target="_blank" rel="noopener">Conversar com a IA →</a>
+        <a class="btn-primary" href="https://assistente.reaperautomate.com" target="_blank" rel="noopener">Conversar com a Karol →</a>
       </div>
 
       <div class="ia-chat">
         <div class="ia-chat-bar">
-          <div class="av">🤖</div>
-          <b>Assistente Automate Pro</b>
+          <div class="av"><img src="img/karol.jpg" alt="Karol" /></div>
+          <b>Karol</b>
           <span class="on">online</span>
         </div>
         <div class="ia-chat-body" id="iaBody">
-          <div class="ia-msg bot">Oi! Sou o assistente oficial do Automate Pro 👋 Pode perguntar qualquer coisa sobre a automação.</div>
+          <div class="ia-msg bot">Oi! Eu sou a <b style="color:#67e8f9;">Karol</b> 👋 Pode perguntar qualquer coisa sobre a automação.</div>
         </div>
         <div class="ia-suggest" id="iaSuggest">
           <button class="ia-chip" data-q="Como crio uma região nova?" data-a="No Criador de Regiões, selecione o trecho da música no arrange e escolha a seção (Intro, Verso, Refrão…). Ele cria a região já nomeada e colorida — e o Automate Pro mostra ela como card de transição. 🎨">Como crio uma região?</button>
@@ -1524,7 +1525,7 @@
       <div class="plan-loading">Carregando planos…</div>
     </div>
 
-    <p class="plan-note">Os valores são carregados em tempo real do sistema oficial. Dúvida em qual escolher? <a href="https://assistente.reaperautomate.com" target="_blank" style="color:#67e8f9;">Pergunte à IA</a> ou fale comigo no WhatsApp.</p>
+    <p class="plan-note">Os valores são carregados em tempo real do sistema oficial. Dúvida em qual escolher? <a href="https://assistente.reaperautomate.com" target="_blank" style="color:#67e8f9;">Pergunte à Karol</a> ou fale comigo no WhatsApp.</p>
   </div>
 </section>
 <script>
@@ -1696,7 +1697,7 @@
 
   <details class="faq-item">
     <summary>Posso testar antes de comprar?</summary>
-    <p>O Automate Pro não tem trial — mas você pode tirar dúvidas com a IA 24/7, falar comigo no WhatsApp e ver o tutorial completo. Quando comprar, se em 7 dias não te servir, devolvo o dinheiro.</p>
+    <p>O Automate Pro não tem trial — mas você pode tirar dúvidas com a Karol 24/7, falar comigo no WhatsApp e ver o tutorial completo. Quando comprar, se em 7 dias não te servir, devolvo o dinheiro.</p>
   </details>
 
   <details class="faq-item">
@@ -1721,7 +1722,7 @@
 
   <details class="faq-item">
     <summary>Suporte?</summary>
-    <p>Direto comigo no WhatsApp, sem ticket, sem espera. Mais o assistente oficial em <a href="https://assistente.reaperautomate.com" style="color:#67e8f9">assistente.reaperautomate.com</a> que tira dúvidas 24/7 baseado no manual completo.</p>
+    <p>Direto comigo no WhatsApp, sem ticket, sem espera. Mais a Karol em <a href="https://assistente.reaperautomate.com" style="color:#67e8f9">assistente.reaperautomate.com</a> que tira dúvidas 24/7 baseada no manual completo.</p>
   </details>
 </section>
 
@@ -1732,7 +1733,7 @@
   <h2>Sua liberdade na adoração <br/><span class="gradient">começa com 1 clique.</span></h2>
   <p>Garante o Automate Pro V7.2. Licença por máquina + updates gratuitos. Não te serviu em 7 dias? Devolvo o dinheiro.</p>
   <a class="btn-primary" href="#planos">Ver planos →</a>
-  <p style="margin-top: 20px; font-size: 13px;">Dúvida na hora: <a href="https://assistente.reaperautomate.com" target="_blank" style="color:#67e8f9;">pergunte à IA 24/7</a> · ou fale comigo no <a href="https://wa.me/" style="color:#34d399;">WhatsApp</a></p>
+  <p style="margin-top: 20px; font-size: 13px;">Dúvida na hora: <a href="https://assistente.reaperautomate.com" target="_blank" style="color:#67e8f9;">pergunte à Karol 24/7</a> · ou fale comigo no <a href="https://wa.me/" style="color:#34d399;">WhatsApp</a></p>
 </section>
 
 <footer>
@@ -1758,7 +1759,10 @@
   .fab-panel { display:none; width:330px; max-width:calc(100vw - 44px); border-radius:18px; overflow:hidden; background:linear-gradient(180deg, rgba(17,20,30,.98), rgba(9,10,16,.98)); border:1px solid rgba(255,255,255,.1); box-shadow:0 40px 90px -30px rgba(0,0,0,.85), 0 0 70px -30px rgba(33,125,230,.45); animation:fadeInUp .25s ease both; }
   .fab-chat.open .fab-panel { display:block; }
   .fab-head { display:flex; align-items:center; gap:10px; padding:14px 16px; border-bottom:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.02); }
-  .fab-head .av { width:34px; height:34px; border-radius:10px; background:linear-gradient(135deg,#217DE6,#67e8f9); display:grid; place-items:center; font-size:17px; }
+  .fab-head .av { width:36px; height:36px; border-radius:50%; overflow:hidden; flex-shrink:0; box-shadow:0 0 0 1px rgba(255,255,255,.15); }
+  .fab-head .av img { width:100%; height:100%; object-fit:cover; display:block; }
+  .fab-btn .fab-face { width:100%; height:100%; border-radius:50%; object-fit:cover; }
+  .fab-chat.open .fab-btn .fab-face { display:none; }
   .fab-head b { font-size:14px; display:block; }
   .fab-head .st { font-size:11px; color:#34d399; display:flex; align-items:center; gap:5px; }
   .fab-head .st::before { content:''; width:6px; height:6px; border-radius:50%; background:#34d399; box-shadow:0 0 7px #34d399; }
@@ -1775,14 +1779,14 @@
   @media (max-width:680px){ .fab-teaser{ display:none; } }
 </style>
 <div class="fab-chat" id="fabChat">
-  <div class="fab-teaser" id="fabTeaser">Oi! 👋 Sou a <b>IA do Automate Pro</b>. Posso tirar qualquer dúvida sobre a automação.<span class="tz">Clique pra conversar</span></div>
+  <div class="fab-teaser" id="fabTeaser">Oi! 👋 Sou a <b>Karol</b>, do Automate Pro. Posso tirar qualquer dúvida sobre a automação.<span class="tz">Clique pra conversar</span></div>
   <div class="fab-panel" id="fabPanel">
     <div class="fab-head">
-      <div class="av">🤖</div>
-      <div><b>Assistente Automate Pro</b><span class="st">online · responde na hora</span></div>
+      <div class="av"><img src="img/karol.jpg" alt="Karol" /></div>
+      <div><b>Karol</b><span class="st">online · responde na hora</span></div>
     </div>
     <div class="fab-body" id="fabBody">
-      <div class="fab-msg bot">Oi! Sou o assistente oficial do Automate Pro 👋 Pergunte o que quiser sobre a automação — ou abra o chat completo no botão abaixo.</div>
+      <div class="fab-msg bot">Oi! Eu sou a <b style="color:#67e8f9;">Karol</b> 👋 assistente do Automate Pro. Pergunte o que quiser sobre a automação — ou abra o chat completo no botão abaixo.</div>
     </div>
     <div class="fab-chips" id="fabChips">
       <button class="fab-chip" data-a="Sim! O Automate Pro roda DENTRO do REAPER (Windows, Mac e Linux). Você já precisa ter o REAPER instalado — o nosso instalador coloca os módulos no lugar certo automaticamente. 🎚️">Preciso do REAPER?</button>
@@ -1790,12 +1794,12 @@
       <button class="fab-chip" data-a="Só na primeira ativação da licença. Depois roda 100% offline — inclusive o controle pelo celular, que é por rede local. 🔌">Funciona offline?</button>
     </div>
     <div class="fab-foot">
-      <a href="https://assistente.reaperautomate.com" target="_blank" rel="noopener">Abrir chat completo com a IA →</a>
+      <a href="https://assistente.reaperautomate.com" target="_blank" rel="noopener">Abrir chat completo com a Karol →</a>
     </div>
   </div>
-  <div class="fab-btn" id="fabBtn" title="Falar com a IA">
+  <div class="fab-btn" id="fabBtn" title="Falar com a Karol">
     <span class="fab-ping">1</span>
-    <svg class="fab-bubble" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+    <img class="fab-face fab-bubble" src="img/karol.jpg" alt="Karol" />
     <svg class="fab-x" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
   </div>
 </div>
