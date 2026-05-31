@@ -755,6 +755,8 @@
   .plan-badge { position:absolute; top:-12px; left:50%; transform:translateX(-50%); padding:5px 14px; border-radius:999px; font-size:11px; font-weight:700; letter-spacing:.04em; background:linear-gradient(135deg,#217DE6,#FF0080); box-shadow:0 8px 20px -8px rgba(255,0,128,.8); white-space:nowrap; }
   .plan-name { font-size:15px; font-weight:700; }
   .plan-tempo { font-size:12px; color:rgba(255,255,255,.5); margin-top:2px; margin-bottom:18px; }
+  .plan-old { font-size:15px; font-weight:600; color:rgba(255,255,255,.4); text-decoration:line-through; margin-bottom:5px; }
+  .plan-off { display:inline-block; align-self:flex-start; margin-top:8px; margin-bottom:16px; padding:3px 10px; border-radius:999px; font-size:11.5px; font-weight:700; color:#34d399; background:rgba(52,211,153,.12); border:1px solid rgba(52,211,153,.3); }
   .plan-price { font-size:40px; font-weight:800; letter-spacing:-.03em; line-height:1; }
   .plan-price small { font-size:15px; font-weight:600; color:rgba(255,255,255,.5); }
   .plan-price .cents { font-size:20px; vertical-align:super; }
@@ -1538,6 +1540,9 @@
     "Premium Anual":     { assinar:"https://www.mercadopago.com.br/subscriptions/checkout?preapproval_plan_id=24b4008ef308437d85249d7c74c86c39", pix:"https://mpago.la/2UvMnf7" },
     "Premium Vitalício": { pix:"https://mpago.la/1aNPLqT" }
   };
+  // Preço "de" (riscado) por plano. Vitalício é fixo; os anuais são calculados
+  // automaticamente a partir do mensal equivalente (12x o mensal).
+  var ANCHOR={ "Premium Vitalício": 447 };
   var WA_FALLBACK="https://wa.me/5519987054629"; // plano sem link mapeado → fala com o Leonardo
   var grid=document.getElementById('planGrid'), toggle=document.getElementById('planToggle'), saveEl=document.getElementById('planSave');
   var FEATS=[
@@ -1556,6 +1561,20 @@
     return '<span class="plan-price"><small>R$ </small>'+r+cents+'</span>';
   }
   function ck(on){ return '<svg class="ck" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">'+(on?'<path d="M20 6L9 17l-5-5"/>':'<path d="M18 6L6 18M6 6l12 12"/>')+'</svg>'; }
+
+  // formata número em reais: sem centavos se for inteiro, senão com vírgula
+  function br(n){ var c=Math.round((n-Math.floor(n))*100); return 'R$ '+Math.floor(n)+(c>0?(','+(c<10?'0':'')+c):''); }
+
+  // preço "de" (âncora) do plano: fixo (ANCHOR) ou, no anual, 12x o mensal equivalente
+  function anchorFor(p){
+    if(ANCHOR[(p.nome||'').trim()]) return ANCHOR[(p.nome||'').trim()];
+    if(p.tempo==='Anual'){
+      var mNome=(p.nome||'').replace(/Anual/i,'Mensal').trim();
+      var m=all.filter(function(x){ return (x.nome||'').trim()===mNome; })[0];
+      if(m) return (parseFloat(m.valor)||0)*12;
+    }
+    return 0;
+  }
 
   // Botões de compra: recorrente tem "Assinar" + link de Pix embaixo; vitalício/único tem só um botão.
   function ctaHtml(p){
@@ -1578,13 +1597,17 @@
       var cyc = p.tempo==='Mensal'?'acesso por 1 mês' : p.tempo==='Anual'?'acesso por 1 ano' : 'pagamento único · vitalício';
       var sub='';
       if(p.tempo==='Anual'){ var m=(parseFloat(p.valor)||0)/12; sub='<div class="plan-cycle" style="color:#34d399;">≈ R$ '+m.toFixed(2).replace('.',',')+' por mês</div>'; }
+      var v=parseFloat(p.valor)||0, anc=anchorFor(p), hasOff=anc>v+0.01;
+      var oldHtml=hasOff?'<div class="plan-old">de '+br(anc)+'</div>':'';
+      var offHtml=hasOff?'<div class="plan-off">economize '+br(anc-v)+' · '+Math.round((anc-v)/anc*100)+'% off</div>':'';
       var feats=FEATS.map(function(f){ var on=!!p[f.k]; return '<li class="'+(on?'':'no')+'">'+ck(on)+' '+f.label+'</li>'; }).join('');
       return '<div class="plan-card'+(feat?' feat':'')+'">'+
         (feat?'<div class="plan-badge">MAIS COMPLETO</div>':'')+
         '<div class="plan-name">'+(p.nome||'Plano')+'</div>'+
         '<div class="plan-tempo">'+(p.desc||'')+'</div>'+
+        oldHtml+
         money(p.valor)+
-        '<div class="plan-cycle">'+cyc+'</div>'+sub+
+        '<div class="plan-cycle">'+cyc+'</div>'+sub+offHtml+
         '<ul class="plan-feats">'+feats+'</ul>'+
         ctaHtml(p)+
       '</div>';
