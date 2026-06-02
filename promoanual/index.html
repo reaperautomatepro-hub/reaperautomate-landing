@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Oferta — Premium Anual por R$ 149,99 | Automate Pro</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" href="/logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { min-height: 100%; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: radial-gradient(1100px 600px at 50% -10%, rgba(33,125,230,.18), transparent 60%), #07070a;
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    padding: 28px 18px;
+    min-height: 100vh;
+  }
+  .card {
+    width: 100%; max-width: 460px;
+    background: #0d0d14;
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 20px;
+    padding: 34px 30px;
+    box-shadow: 0 24px 70px rgba(0,0,0,.55);
+  }
+  .logo { display:block; height: 34px; margin: 0 auto 22px; }
+  .badge {
+    display:inline-block; font-size: 11.5px; font-weight: 700; letter-spacing: .5px;
+    color:#67e8f9; background: rgba(103,232,249,.1); border:1px solid rgba(103,232,249,.28);
+    padding: 5px 11px; border-radius: 999px; margin-bottom: 14px;
+  }
+  h1 { font-size: 25px; font-weight: 800; line-height: 1.2; margin-bottom: 10px; }
+  h1 b { background: linear-gradient(135deg,#7cc0ff,#ff6bb0); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+  .preco { display:flex; align-items:baseline; gap:10px; margin: 6px 0 16px; }
+  .preco .de { color:#8b8b9e; text-decoration: line-through; font-size: 15px; }
+  .preco .por { font-size: 32px; font-weight: 800; }
+  .preco .ano { color:#a0a0b0; font-size: 13px; }
+  ul { list-style:none; margin: 0 0 20px; display:flex; flex-direction:column; gap:9px; }
+  li { font-size: 13.5px; color:#cfcfe0; display:flex; gap:9px; align-items:flex-start; line-height:1.5; }
+  li::before { content:"✓"; color:#2ECF71; font-weight:800; flex-shrink:0; }
+  input {
+    width:100%; box-sizing:border-box; margin-bottom:12px; padding:13px 14px;
+    background:#15151f; border:1px solid rgba(255,255,255,.12); border-radius:10px;
+    color:#fff; font-size:14px; font-family:inherit;
+  }
+  input:focus { outline:none; border-color: rgba(103,232,249,.55); }
+  .aviso {
+    margin:2px 0 16px; font-size:12.5px; color:#E6B422; line-height:1.5;
+    background:rgba(230,180,34,.08); border:1px solid rgba(230,180,34,.25);
+    border-radius:9px; padding:10px 12px;
+  }
+  #err { display:none; margin:0 0 12px; font-size:12.5px; color:#ff8585;
+    background:rgba(255,107,107,.08); border:1px solid rgba(255,107,107,.32);
+    border-radius:9px; padding:9px 12px; line-height:1.45; }
+  button {
+    width:100%; padding:15px; border:none; border-radius:11px;
+    background:linear-gradient(135deg,#217DE6,#FF0080); color:#fff;
+    font-size:15.5px; font-weight:700; cursor:pointer; font-family:inherit;
+  }
+  button:disabled { opacity:.7; cursor:default; }
+  .rodape { margin-top:14px; font-size:11.5px; color:#7a7a8c; text-align:center; line-height:1.6; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <img src="/logo.png" alt="Automate Pro" class="logo" />
+    <span class="badge">OFERTA DE UPGRADE</span>
+    <h1>Passe para o <b>Premium Anual</b> com desconto</h1>
+    <div class="preco">
+      <span class="de">R$ 179,99</span>
+      <span class="por">R$ 149,99</span>
+      <span class="ano">/ ano</span>
+    </div>
+    <ul>
+      <li>1 ano inteiro de acesso — sem se preocupar com renovação mês a mês.</li>
+      <li>Todos os módulos Premium, em até 3 máquinas.</li>
+      <li>Preço travado: você fica livre de reajustes durante o ano.</li>
+      <li>Ativação automática assim que o pagamento cair.</li>
+    </ul>
+
+    <form id="form" novalidate>
+      <input id="nome" type="text" required autocomplete="name" placeholder="Nome completo" />
+      <input id="tel" type="tel" required autocomplete="tel" placeholder="WhatsApp com DDD (ex: 11 99999-8888)" />
+      <input id="email" type="email" required autocomplete="email" placeholder="Seu melhor e-mail" />
+      <p class="aviso">⚠️ Use <b>este mesmo e-mail</b> no pagamento — é por ele que sua licença é liberada e que você ativa no REAPER.</p>
+      <div id="err"></div>
+      <button id="btn" type="submit">Garantir por R$ 149,99 →</button>
+    </form>
+    <p class="rodape">Pagamento único via Mercado Pago (Pix ou cartão). Acesso liberado automaticamente no e-mail informado.</p>
+  </div>
+
+<script>
+(function(){
+  var CHECKOUT = "https://assistente.reaperautomate.com/api/checkout";
+  var PLANO = "Premium Anual Promo";          // o webhook traduz pra "Premium Anual" (1 ano, 3 máq.)
+  var FALLBACK = "https://mpago.la/2jAddfL";   // link estático da promo, se a API travar
+  var form=document.getElementById('form'), btn=document.getElementById('btn'), elErr=document.getElementById('err');
+  var elNome=document.getElementById('nome'), elTel=document.getElementById('tel'), elEmail=document.getElementById('email');
+  function erro(msg, campo){ elErr.textContent=msg; elErr.style.display='block'; if(campo){ campo.focus(); campo.style.borderColor='rgba(255,107,107,.6)'; } }
+  function limpaErro(){ elErr.style.display='none'; [elNome,elTel,elEmail].forEach(function(c){ c.style.borderColor='rgba(255,255,255,.12)'; }); }
+  form.addEventListener('input', limpaErro);
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    limpaErro();
+    var nome=elNome.value.trim().replace(/\s+/g,' ');
+    var tel=elTel.value.replace(/\D/g,'');
+    var email=elEmail.value.trim().toLowerCase();
+    if(nome.length<3 || nome.split(' ').filter(Boolean).length<2){ return erro('Digite seu nome completo (nome e sobrenome).', elNome); }
+    if(tel.length<10 || tel.length>13){ return erro('WhatsApp inválido — inclua o DDD. Ex: 11 99999-8888', elTel); }
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ return erro('E-mail inválido — confira o @ e o domínio (ex: voce@gmail.com).', elEmail); }
+    btn.disabled=true; btn.textContent='Indo pro pagamento…';
+    var payload={ nome:nome, telefone:tel, email:email, plano:PLANO, tipo:'unico' };
+    var done=false, go=function(url){ if(!done){ done=true; window.location.href=url; } };
+    var fb=setTimeout(function(){ go(FALLBACK); }, 9000);
+    fetch(CHECKOUT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
+      .then(function(r){ return r.json(); })
+      .then(function(d){ clearTimeout(fb); go(d && d.init_point ? d.init_point : FALLBACK); })
+      .catch(function(){ clearTimeout(fb); go(FALLBACK); });
+  });
+})();
+</script>
+</body>
+</html>
