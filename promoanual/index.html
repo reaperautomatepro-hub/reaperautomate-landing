@@ -101,6 +101,13 @@
   var FALLBACK = "https://mpago.la/2jAddfL";   // link estático da promo, se a API travar
   var form=document.getElementById('form'), btn=document.getElementById('btn'), elErr=document.getElementById('err');
   var elNome=document.getElementById('nome'), elTel=document.getElementById('tel'), elEmail=document.getElementById('email');
+  // pré-preenche a partir do link do e-mail de oferta (?nome=&email=&tel=) pra reduzir fricção
+  try {
+    var qs = new URLSearchParams(location.search);
+    if (qs.get('nome'))  elNome.value  = qs.get('nome');
+    if (qs.get('email')) elEmail.value = qs.get('email');
+    if (qs.get('tel'))   elTel.value   = qs.get('tel');
+  } catch(e){}
   function erro(msg, campo){ elErr.textContent=msg; elErr.style.display='block'; if(campo){ campo.focus(); campo.style.borderColor='rgba(255,107,107,.6)'; } }
   function limpaErro(){ elErr.style.display='none'; [elNome,elTel,elEmail].forEach(function(c){ c.style.borderColor='rgba(255,255,255,.12)'; }); }
   form.addEventListener('input', limpaErro);
