@@ -818,6 +818,19 @@
   .hero-credit { position:absolute; bottom:10px; right:14px; z-index:2; font-size:10px; letter-spacing:.04em; color:rgba(255,255,255,.45); background:rgba(0,0,0,.32); padding:3px 8px; border-radius:6px; backdrop-filter:blur(4px); }
   @media (max-width:680px){ .hero-photo{ background-position:center 28%; } .hero-wrap .hero{ padding-top:44px; } }
 
+  /* ---------- BARRA DE NÚMEROS (prova social) ---------- */
+  .stats-bar { border-bottom:1px solid rgba(255,255,255,.06); background:linear-gradient(180deg, rgba(33,125,230,.06), transparent); }
+  .stats-grid { max-width:1000px; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); padding:36px 24px; }
+  .stat-item { text-align:center; padding:6px 18px; position:relative; }
+  .stat-item + .stat-item::before { content:''; position:absolute; left:0; top:16%; height:68%; width:1px; background:rgba(255,255,255,.1); }
+  .stat-num { font-size:clamp(30px,4.6vw,46px); font-weight:800; letter-spacing:-.03em; line-height:1; background:linear-gradient(135deg,#7cc0ff,#FF0080); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+  .stat-label { font-size:13px; color:rgba(255,255,255,.55); margin-top:11px; line-height:1.45; }
+  @media (max-width:640px){
+    .stats-grid { grid-template-columns:1fr 1fr; gap:26px 0; }
+    .stat-item:nth-child(3) { grid-column:1 / -1; }
+    .stat-item + .stat-item::before { display:none; }
+  }
+
   /* ---------- SHOWCASE (prints reais) ---------- */
   .fb-art.shot { aspect-ratio:auto; background:none; border:none; padding:0; display:block; }
   .fb-art.shot img { width:100%; display:block; border-radius:14px; background:#15151c; border:1px solid rgba(255,255,255,.1); box-shadow:0 26px 60px -30px rgba(0,0,0,.85), 0 0 50px -28px rgba(33,125,230,.4); transition:transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s; object-fit:cover; }
@@ -896,6 +909,64 @@
   </div>
   <div class="hero-credit">Automate Pro ao vivo · equipe de louvor</div>
 </section>
+
+<!-- ====================================================== -->
+<!-- BARRA DE NÚMEROS (prova social)                        -->
+<!-- ====================================================== -->
+<section class="stats-bar">
+  <div class="stats-grid">
+    <div class="stat-item">
+      <div class="stat-num" data-count="1000" data-prefix="+">+1.000</div>
+      <div class="stat-label">máquinas usando o Automate Pro</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" id="statMusicas" data-count="250" data-prefix="+">+250</div>
+      <div class="stat-label">músicas automatizadas na nuvem</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" data-count="7" data-suffix=" dias">7 dias</div>
+      <div class="stat-label">de garantia ou seu dinheiro de volta</div>
+    </div>
+  </div>
+</section>
+<script>
+(function(){
+  var nums = [].slice.call(document.querySelectorAll('.stat-num'));
+  if(!nums.length) return;
+
+  function fmt(el, n){
+    return (el.getAttribute('data-prefix')||'') + Math.round(n).toLocaleString('pt-BR') + (el.getAttribute('data-suffix')||'');
+  }
+  function animar(el){
+    if(el.dataset.done) return; el.dataset.done='1';
+    var alvo=parseInt(el.getAttribute('data-count'),10)||0, dur=1100, ini=null;
+    function passo(ts){ if(!ini) ini=ts; var p=Math.min((ts-ini)/dur,1); var e=1-Math.pow(1-p,3); el.textContent=fmt(el, alvo*e); if(p<1) requestAnimationFrame(passo); }
+    requestAnimationFrame(passo);
+  }
+
+  // músicas: conta ao vivo o nó público `mapeamentos` (com fallback no valor fixo)
+  fetch('https://reaper-26e29-default-rtdb.firebaseio.com/mapeamentos.json?shallow=true')
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      var n = d ? Object.keys(d).length : 0;
+      if(n>0){
+        var arred = Math.max(250, Math.floor(n/10)*10); // arredonda pra baixo, nunca abaixo do piso
+        var el = document.getElementById('statMusicas');
+        el.setAttribute('data-count', arred);
+        if(el.dataset.done){ el.textContent = fmt(el, arred); } // já animou? aplica direto
+      }
+    }).catch(function(){});
+
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){ if(en.isIntersecting){ animar(en.target); io.unobserve(en.target); } });
+    }, { threshold: 0.4 });
+    nums.forEach(function(el){ io.observe(el); });
+  } else {
+    nums.forEach(animar);
+  }
+})();
+</script>
 
 <!-- ====================================================== -->
 <!-- DEMO AO VIVO                                           -->
