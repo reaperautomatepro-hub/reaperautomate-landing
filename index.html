@@ -748,6 +748,26 @@
   .plan-toggle { display:inline-flex; padding:5px; border-radius:999px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.09); margin:0 auto 14px; gap:4px; }
   .plan-toggle button { padding:9px 22px; border-radius:999px; font-size:13px; font-weight:600; color:rgba(255,255,255,.6); transition:.2s; }
   .plan-toggle button.on { background:linear-gradient(135deg,#217DE6,#FF0080); color:#fff; box-shadow:0 8px 24px -10px rgba(255,0,128,.7); }
+  /* Duas seções de planos: Desktop (Automate Pro) e Nuvem */
+  .plan-sec-head { text-align:center; font-size:18px; font-weight:800; color:#fff; margin:6px 0 16px; }
+  .plan-sec-head .ps-ico { font-size:19px; margin-right:4px; }
+  .plan-sec-head small { display:block; max-width:560px; margin:5px auto 0; font-size:12.5px; font-weight:500; color:#9aa3b2; line-height:1.5; }
+  .plan-sec-head small b { color:#67e8f9; }
+  .plan-sec-head.nuvem { margin-top:56px; }
+  .plan-feats li.hi { color:#67e8f9; }
+  .plan-feats li.hi b { color:#a5f3fc; font-weight:700; }
+  .plan-feats li.hi .nv-ico { margin-right:2px; }
+  /* Cards da Nuvem — accent ciano (em vez do magenta do Premium) */
+  .plan-card.nuvem { border-color:rgba(34,211,238,.26); }
+  .plan-card.nuvem:hover { border-color:rgba(34,211,238,.5); }
+  .plan-card.nuvem.pop { border-color:rgba(34,211,238,.5); box-shadow:0 30px 80px -35px rgba(34,211,238,.5); background:linear-gradient(180deg, rgba(34,211,238,.07), rgba(33,125,230,.03)); }
+  .nuvem-badge { background:linear-gradient(135deg,#22d3ee,#217DE6) !important; box-shadow:0 8px 20px -8px rgba(34,211,238,.8) !important; }
+  .plan-card.nuvem .plan-cta { background:linear-gradient(135deg,#22d3ee,#217DE6); border:none; color:#fff; }
+  .plan-card.nuvem .plan-cta:hover { transform:translateY(-1px); box-shadow:0 12px 30px -10px rgba(34,211,238,.6); }
+  .plan-toggle.nuvem button.on { background:linear-gradient(135deg,#22d3ee,#217DE6); box-shadow:0 8px 24px -10px rgba(34,211,238,.7); }
+  .nuvem-grid { margin-top:0; }
+  .nuvem-value { font-size:12px; color:#9fb2c8; margin:3px 0 14px; line-height:1.4; }
+  .nuvem-value .nv-off { display:inline-block; margin-left:5px; font-weight:800; color:#34d399; background:rgba(52,211,153,.12); border:1px solid rgba(52,211,153,.3); border-radius:6px; padding:1px 7px; font-size:11px; }
   .plan-save { font-size:12.5px; color:#34d399; margin-bottom:36px; min-height:18px; }
   .plan-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px; max-width:980px; margin:0 auto; align-items:stretch; }
   .plan-card { position:relative; border-radius:20px; padding:32px 26px; background:linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.012)); border:1px solid rgba(255,255,255,.09); display:flex; flex-direction:column; transition:transform .25s, box-shadow .25s, border-color .25s; }
@@ -1587,6 +1607,8 @@
       <p>Licença por máquina, ativação simples e updates gratuitos. Cancele quando quiser nos planos mensais.</p>
     </div>
 
+    <!-- ── 1) DESKTOP: Automate Pro ── -->
+    <div class="plan-sec-head"><span class="ps-ico">🖥️</span> Automate Pro <small>a ferramenta que automatiza o seu REAPER no palco</small></div>
     <div style="text-align:center;">
       <div class="plan-toggle" id="planToggle">
         <button data-cycle="Mensal">Mensal</button>
@@ -1599,6 +1621,16 @@
     <div class="plan-grid" id="planGrid">
       <div class="plan-loading">Carregando planos…</div>
     </div>
+
+    <!-- ── 2) NUVEM ── -->
+    <div class="plan-sec-head nuvem"><span class="ps-ico">☁️</span> Nuvem <small>player de estudo + storage das suas músicas + compartilhar biblioteca · <b>requer o Premium</b> · assinatura à parte</small></div>
+    <div style="text-align:center;">
+      <div class="plan-toggle nuvem" id="nuvemToggle">
+        <button data-cycle="Mensal">Mensal</button>
+        <button data-cycle="Anual" class="on">Anual</button>
+      </div>
+    </div>
+    <div class="plan-grid nuvem-grid" id="nuvemGrid"></div>
 
     <p class="plan-note">Os valores são carregados em tempo real do sistema oficial. Dúvida em qual escolher? <a href="https://assistente.reaperautomate.com" target="_blank" style="color:#67e8f9;">Pergunte à Karol</a> ou fale comigo no WhatsApp.</p>
   </div>
@@ -1619,14 +1651,22 @@
   // Preço "de" (riscado) por plano. Vitalício é fixo; os anuais são calculados
   // automaticamente a partir do mensal equivalente (12x o mensal).
   var ANCHOR={ "Premium Vitalício": 447 };
+  // Tiers da NUVEM (produto à parte, recorrente). Preços/quotas batem com
+  // mp-config.ts (PLANOS_POR_NOME: "Nuvem <Nome> <Ciclo>"). Sempre mostra o nº de músicas.
+  var NUVEM_TIERS=[
+    { nome:'Essencial', musicas:30,  volunt:25,  kbps:192, mes:19.99, ano:199.99, pop:false },
+    { nome:'Plus',      musicas:120, volunt:60,  kbps:256, mes:39.99, ano:399.99, pop:true  },
+    { nome:'Ultra',     musicas:500, volunt:100, kbps:256, mes:79.99, ano:799.99, pop:false }
+  ];
   var WA_FALLBACK="https://wa.me/5519987054629"; // plano sem link mapeado → fala com o Leonardo
   var grid=document.getElementById('planGrid'), toggle=document.getElementById('planToggle'), saveEl=document.getElementById('planSave');
+  var nuvemGrid=document.getElementById('nuvemGrid'), nuvemToggle=document.getElementById('nuvemToggle'), nuvemCycle='Anual';
   var FEATS=[
     {k:'f_controlador', label:'Automate Pro (controlador)'},
     {k:'f_criador',     label:'Criador de Regiões'},
     {k:'f_web',         label:'Modo WEB (controle pelo celular)'},
     {k:'f_manager',     label:'Automate Manager'},
-    {k:'f_nuvem',       label:'Mapeamento automático (nuvem)'}
+    {k:'f_nuvem',       label:'Mapeamento Compartilhado'}
   ];
   var all=[], cycle='Anual';
 
@@ -1638,8 +1678,8 @@
   }
   function ck(on){ return '<svg class="ck" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">'+(on?'<path d="M20 6L9 17l-5-5"/>':'<path d="M18 6L6 18M6 6l12 12"/>')+'</svg>'; }
 
-  // formata número em reais: sem centavos se for inteiro, senão com vírgula
-  function br(n){ var c=Math.round((n-Math.floor(n))*100); return 'R$ '+Math.floor(n)+(c>0?(','+(c<10?'0':'')+c):''); }
+  // formata número em reais: separador de milhar (.) + centavos com vírgula só se houver
+  function br(n){ var r=Math.floor(n), c=Math.round((n-r)*100); var ri=(''+r).replace(/\B(?=(\d{3})+(?!\d))/g,'.'); return 'R$ '+ri+(c>0?(','+(c<10?'0':'')+c):''); }
 
   // preço "de" (âncora) do plano: fixo (ANCHOR) ou, no anual, 12x o mensal equivalente
   function anchorFor(p){
@@ -1664,38 +1704,73 @@
     return '<a class="plan-cta" href="'+WA_FALLBACK+'" target="_blank" rel="noopener">Garantir agora →</a>';
   }
 
+  // Card padrão (Básico, Premium Vitalício) — sem seletor de nuvem.
+  function standardCard(p){
+    var feat=/premium/i.test(p.nome||'') || (p.f_web&&p.f_manager&&p.f_nuvem);
+    var cyc = p.tempo==='Mensal'?'acesso por 1 mês' : p.tempo==='Anual'?'acesso por 1 ano' : 'pagamento único · vitalício';
+    var sub='';
+    if(p.tempo==='Anual'){ var m=(parseFloat(p.valor)||0)/12; sub='<div class="plan-cycle" style="color:#34d399;">≈ R$ '+m.toFixed(2).replace('.',',')+' por mês</div>'; }
+    var v=parseFloat(p.valor)||0, anc=anchorFor(p), hasOff=anc>v+0.01;
+    var oldHtml=hasOff?'<div class="plan-old">de '+br(anc)+'</div>':'';
+    var offHtml=hasOff?'<div class="plan-off">economize '+br(anc-v)+' · '+Math.round((anc-v)/anc*100)+'% off</div>':'';
+    var lim=parseInt(p.limite,10)||1;
+    var maqHtml='<div class="plan-machines'+(lim>1?' multi':'')+'">🖥️ <b>'+lim+'</b> '+(lim>1?'máquinas':'máquina')+'</div>';
+    var upHtml = (p.tempo==='Mensal' && lim<=1)
+      ? '<div class="plan-upsell">💡 <span>Precisa usar em mais de um computador? O plano <b>anual</b> libera 2 ou mais máquinas.</span></div>'
+      : '';
+    var feats=FEATS.map(function(f){ var on=!!p[f.k]; return '<li class="'+(on?'':'no')+'">'+ck(on)+' '+f.label+'</li>'; }).join('');
+    var perk = /premium/i.test(p.nome||'') ? '<li class="hi"><span class="nv-ico">📱</span> <b>App de Escala</b> grátis · 8 voluntários · 3 músicas</li>' : '';
+    return '<div class="plan-card'+(feat?' feat':'')+'">'+
+      (feat?'<div class="plan-badge">MAIS COMPLETO</div>':'')+
+      '<div class="plan-name">'+(p.nome||'Plano')+'</div>'+
+      '<div class="plan-tempo">'+(p.desc||'')+'</div>'+
+      oldHtml+
+      money(p.valor)+
+      '<div class="plan-cycle">'+cyc+'</div>'+sub+offHtml+
+      maqHtml+upHtml+
+      '<ul class="plan-feats">'+feats+perk+'</ul>'+
+      ctaHtml(p)+
+    '</div>';
+  }
+
   function render(){
     var list=all.filter(function(p){ return p.tempo===cycle; });
     list.sort(function(a,b){ return (parseFloat(a.valor)||0)-(parseFloat(b.valor)||0); });
     if(!list.length){ grid.innerHTML='<div class="plan-loading">Nenhum plano '+cycle.toLowerCase()+' disponível no momento.</div>'; return; }
-    grid.innerHTML=list.map(function(p){
-      var feat=/premium/i.test(p.nome||'') || (p.f_web&&p.f_manager&&p.f_nuvem);
-      var cyc = p.tempo==='Mensal'?'acesso por 1 mês' : p.tempo==='Anual'?'acesso por 1 ano' : 'pagamento único · vitalício';
-      var sub='';
-      if(p.tempo==='Anual'){ var m=(parseFloat(p.valor)||0)/12; sub='<div class="plan-cycle" style="color:#34d399;">≈ R$ '+m.toFixed(2).replace('.',',')+' por mês</div>'; }
-      var v=parseFloat(p.valor)||0, anc=anchorFor(p), hasOff=anc>v+0.01;
-      var oldHtml=hasOff?'<div class="plan-old">de '+br(anc)+'</div>':'';
-      var offHtml=hasOff?'<div class="plan-off">economize '+br(anc-v)+' · '+Math.round((anc-v)/anc*100)+'% off</div>':'';
-      var lim=parseInt(p.limite,10)||1;
-      var maqHtml='<div class="plan-machines'+(lim>1?' multi':'')+'">🖥️ <b>'+lim+'</b> '+(lim>1?'máquinas':'máquina')+'</div>';
-      // No mensal (1 máquina) mostramos o caminho pro anual; no anual reforçamos o ganho.
-      var upHtml = (p.tempo==='Mensal' && lim<=1)
-        ? '<div class="plan-upsell">💡 <span>Precisa usar em mais de um computador? O plano <b>anual</b> libera 2 ou mais máquinas.</span></div>'
-        : '';
-      var feats=FEATS.map(function(f){ var on=!!p[f.k]; return '<li class="'+(on?'':'no')+'">'+ck(on)+' '+f.label+'</li>'; }).join('');
-      return '<div class="plan-card'+(feat?' feat':'')+'">'+
-        (feat?'<div class="plan-badge">MAIS COMPLETO</div>':'')+
-        '<div class="plan-name">'+(p.nome||'Plano')+'</div>'+
-        '<div class="plan-tempo">'+(p.desc||'')+'</div>'+
-        oldHtml+
-        money(p.valor)+
-        '<div class="plan-cycle">'+cyc+'</div>'+sub+offHtml+
-        maqHtml+upHtml+
-        '<ul class="plan-feats">'+feats+'</ul>'+
-        ctaHtml(p)+
-      '</div>';
-    }).join('');
+    grid.innerHTML=list.map(standardCard).join('');
   }
+
+  // Card de um tier da Nuvem (produto à parte, recorrente). data-plano = "Nuvem <Nome> <Ciclo>"
+  // (casa com mp-config PLANOS_POR_NOME). Sempre mostra o nº de músicas (teto explícito).
+  function nuvemCard(t){
+    var preco = nuvemCycle==='Anual' ? t.ano : t.mes;
+    var per   = nuvemCycle==='Anual' ? 'por ano' : 'por mês';
+    var sub   = nuvemCycle==='Anual' ? '<div class="plan-cycle" style="color:#34d399;">≈ R$ '+(preco/12).toFixed(2).replace('.',',')+' por mês</div>' : '';
+    var plano = 'Nuvem '+t.nome+' '+nuvemCycle;
+    // "de X por Y": X (preço cheio) = quanto esse tanto de músicas custaria no custo/música
+    // do Essencial (base); Y = preço real. Ambos terminam em ,99. % de desconto vem do de/por.
+    var baseEss=NUVEM_TIERS[0], baseRate=(nuvemCycle==='Anual'?baseEss.ano:baseEss.mes)/baseEss.musicas;
+    var de=Math.floor(t.musicas*baseRate)+0.99, off=Math.round((1-preco/de)*100);
+    var oldHtml=(off>=1)?'<div class="plan-old">de '+br(de)+'</div>':'';
+    var valueLine=(off>=1)?'<div class="nuvem-value"><span class="nv-off">'+off+'% de desconto</span></div>':'';
+    return '<div class="plan-card nuvem'+(t.pop?' pop':'')+'">'+
+      (t.pop?'<div class="plan-badge nuvem-badge">MAIS ESCOLHIDO</div>':'')+
+      '<div class="plan-name">Nuvem '+t.nome+'</div>'+
+      '<div class="plan-tempo">player de estudo · storage · compartilhar</div>'+
+      oldHtml+
+      money(preco)+
+      '<div class="plan-cycle">'+per+'</div>'+sub+valueLine+
+      '<ul class="plan-feats">'+
+        '<li>'+ck(true)+' <b>'+t.musicas+'</b> músicas na nuvem</li>'+
+        '<li>'+ck(true)+' até <b>'+t.volunt+'</b> voluntários no app</li>'+
+        '<li>'+ck(true)+' player multitrack (estudo das tracks)</li>'+
+        '<li>'+ck(true)+' compartilhar biblioteca</li>'+
+        '<li>'+ck(true)+' áudio até <b>'+t.kbps+' kbps</b></li>'+
+      '</ul>'+
+      '<a class="plan-cta js-checkout" href="'+WA_FALLBACK+'" data-plano="'+plano+'" data-tipo="assinatura" rel="noopener">Assinar →</a>'+
+    '</div>';
+  }
+  function renderNuvem(){ nuvemGrid.innerHTML=NUVEM_TIERS.map(nuvemCard).join(''); }
 
   function updateSave(){
     if(cycle!=='Anual'){ saveEl.textContent=''; return; }
@@ -1708,6 +1783,15 @@
     [].forEach.call(toggle.children,function(c){ c.classList.toggle('on', c===b); });
     updateSave(); render();
   });
+
+  // Toggle da Nuvem (mensal/anual — só recorrente, sem vitalício).
+  nuvemToggle.addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    nuvemCycle=b.getAttribute('data-cycle');
+    [].forEach.call(nuvemToggle.children,function(c){ c.classList.toggle('on', c===b); });
+    renderNuvem();
+  });
+  renderNuvem();  // a Nuvem não depende do Firebase — renderiza já no load
 
   fetch(DB).then(function(r){ return r.json(); }).then(function(data){
     all=Object.keys(data||{}).map(function(k){ return data[k]; })
