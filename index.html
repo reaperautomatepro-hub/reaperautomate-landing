@@ -767,6 +767,9 @@
   .plan-toggle.nuvem button.on { background:linear-gradient(135deg,#22d3ee,#217DE6); box-shadow:0 8px 24px -10px rgba(34,211,238,.7); }
   .nuvem-grid { margin-top:0; }
   .nuvem-value { font-size:12px; color:#9fb2c8; margin:3px 0 14px; line-height:1.4; }
+  .nuvem-promo { display:flex; flex-direction:column; align-items:center; gap:1px; margin:0 0 14px; padding:8px 10px; border-radius:10px; font-size:12px; font-weight:800; color:#fff; text-align:center; line-height:1.25; background:linear-gradient(135deg,#FF7A18,#FF0080); box-shadow:0 8px 20px -10px rgba(255,0,128,.7); animation:promoPulse 1.8s ease-in-out infinite; }
+  .nuvem-promo span { font-size:11px; font-weight:700; opacity:.95; }
+  @keyframes promoPulse { 0%,100%{ box-shadow:0 8px 20px -10px rgba(255,0,128,.7); } 50%{ box-shadow:0 10px 26px -8px rgba(255,122,24,.8); } }
   .nuvem-value .nv-off { display:inline-block; margin-left:5px; font-weight:800; color:#34d399; background:rgba(52,211,153,.12); border:1px solid rgba(52,211,153,.3); border-radius:6px; padding:1px 7px; font-size:11px; }
   .plan-save { font-size:12.5px; color:#34d399; margin-bottom:36px; min-height:18px; }
   .plan-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px; max-width:980px; margin:0 auto; align-items:stretch; }
@@ -1740,6 +1743,13 @@
     grid.innerHTML=list.map(standardCard).join('');
   }
 
+  // PROMO "compre 1, leve 2" na Nuvem — só 01 e 02/07/2026 (horário de Brasília).
+  // Some sozinho depois. O DOBRO de verdade é aplicado no webhook (server-side).
+  var PROMO_NUVEM_DOBRO = (function(){
+    try { var h = new Date().toLocaleDateString('en-CA', { timeZone:'America/Sao_Paulo' });
+      return h === '2026-07-01' || h === '2026-07-02'; } catch(e){ return false; }
+  })();
+
   // Card de um tier da Nuvem (produto à parte, recorrente). data-plano = "Nuvem <Nome> <Ciclo>"
   // (casa com mp-config PLANOS_POR_NOME). Sempre mostra o nº de músicas (teto explícito).
   function nuvemCard(t){
@@ -1753,8 +1763,12 @@
     var de=Math.floor(t.musicas*baseRate)+0.99, off=Math.round((1-preco/de)*100);
     var oldHtml=(off>=1)?'<div class="plan-old">de '+br(de)+'</div>':'';
     var valueLine=(off>=1)?'<div class="nuvem-value"><span class="nv-off">'+off+'% de desconto</span></div>':'';
+    var promoHtml=PROMO_NUVEM_DOBRO
+      ? '<div class="nuvem-promo">🔥 Compre 1, leve 2 — só hoje e amanhã!<span>'+(nuvemCycle==='Anual'?'2 anos':'2 meses')+' pelo preço de 1</span></div>'
+      : '';
     return '<div class="plan-card nuvem'+(t.pop?' pop':'')+'">'+
       (t.pop?'<div class="plan-badge nuvem-badge">MAIS ESCOLHIDO</div>':'')+
+      promoHtml+
       '<div class="plan-name">Nuvem '+t.nome+'</div>'+
       '<div class="plan-tempo">player de estudo · storage · compartilhar</div>'+
       oldHtml+
