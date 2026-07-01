@@ -1745,10 +1745,11 @@
 
   // PROMO "compre 1, leve 2" na Nuvem — só 01 e 02/07/2026 (horário de Brasília).
   // Some sozinho depois. O DOBRO de verdade é aplicado no webhook (server-side).
-  var PROMO_NUVEM_DOBRO = (function(){
-    try { var h = new Date().toLocaleDateString('en-CA', { timeZone:'America/Sao_Paulo' });
-      return h === '2026-07-01' || h === '2026-07-02'; } catch(e){ return false; }
+  var PROMO_HOJE_BRT = (function(){
+    try { return new Date().toLocaleDateString('en-CA', { timeZone:'America/Sao_Paulo' }); } catch(e){ return ''; }
   })();
+  var PROMO_NUVEM_DOBRO = (PROMO_HOJE_BRT === '2026-07-01' || PROMO_HOJE_BRT === '2026-07-02');
+  var PROMO_ULTIMO_DIA  = (PROMO_HOJE_BRT === '2026-07-02'); // 02/07 = último dia da promo
 
   // Card de um tier da Nuvem (produto à parte, recorrente). data-plano = "Nuvem <Nome> <Ciclo>"
   // (casa com mp-config PLANOS_POR_NOME). Sempre mostra o nº de músicas (teto explícito).
@@ -1764,7 +1765,7 @@
     var oldHtml=(off>=1)?'<div class="plan-old">de '+br(de)+'</div>':'';
     var valueLine=(off>=1)?'<div class="nuvem-value"><span class="nv-off">'+off+'% de desconto</span></div>':'';
     var promoHtml=PROMO_NUVEM_DOBRO
-      ? '<div class="nuvem-promo">🔥 Compre 1, leve 2 — só hoje e amanhã!<span>'+(nuvemCycle==='Anual'?'2 anos':'2 meses')+' pelo preço de 1</span></div>'
+      ? '<div class="nuvem-promo">🔥 Compre 1, leve 2 — '+(PROMO_ULTIMO_DIA?'só hoje, ÚLTIMO DIA!':'só hoje e amanhã!')+'<span>'+(nuvemCycle==='Anual'?'2 anos':'2 meses')+' pelo preço de 1</span></div>'
       : '';
     return '<div class="plan-card nuvem'+(t.pop?' pop':'')+'">'+
       (t.pop?'<div class="plan-badge nuvem-badge">MAIS ESCOLHIDO</div>':'')+
