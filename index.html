@@ -2876,7 +2876,13 @@ document.getElementById('apLogoArea').addEventListener('click', (e) => {
     var fb=setTimeout(function(){ go(destino); }, 9000);
     fetch(CHECKOUT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
       .then(function(r){ return r.json(); })
-      .then(function(d){ clearTimeout(fb); go(d && d.init_point ? d.init_point : destino); })
+      .then(function(d){
+        clearTimeout(fb);
+        if(d && d.init_point){ go(d.init_point); return; }
+        // API recusou com um aviso (ex.: Nuvem sem plano do app) → mostra no modal.
+        if(d && d.mensagem){ btn.disabled=false; btn.textContent='Continuar pro pagamento →'; erro(d.mensagem); return; }
+        go(destino);
+      })
       .catch(function(){ clearTimeout(fb); go(destino); });
   });
 })();
