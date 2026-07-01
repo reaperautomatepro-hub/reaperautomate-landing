@@ -802,9 +802,19 @@
   .plan-toggle.nuvem button.on { background:linear-gradient(135deg,#22d3ee,#217DE6); box-shadow:0 8px 24px -10px rgba(34,211,238,.7); }
   .nuvem-grid { margin-top:0; }
   .nuvem-value { font-size:12px; color:#9fb2c8; margin:3px 0 14px; line-height:1.4; }
-  .nuvem-promo { display:flex; flex-direction:column; align-items:center; gap:1px; margin:0 0 14px; padding:8px 10px; border-radius:10px; font-size:12px; font-weight:800; color:#fff; text-align:center; line-height:1.25; background:linear-gradient(135deg,#FF7A18,#FF0080); box-shadow:0 8px 20px -10px rgba(255,0,128,.7); animation:promoPulse 1.8s ease-in-out infinite; }
-  .nuvem-promo span { font-size:11px; font-weight:700; opacity:.95; }
-  @keyframes promoPulse { 0%,100%{ box-shadow:0 8px 20px -10px rgba(255,0,128,.7); } 50%{ box-shadow:0 10px 26px -8px rgba(255,122,24,.8); } }
+  /* Banner ÚNICO da promo (acima da grade) — vidro escuro + borda gradiente animada */
+  .nuvem-promo-banner { position:relative; max-width:600px; margin:4px auto 32px; padding:20px 28px; border-radius:18px; text-align:center; background:linear-gradient(180deg, rgba(255,140,40,.06), rgba(255,0,128,.035)), rgba(12,14,22,.55); box-shadow:0 24px 70px -32px rgba(255,90,60,.45); }
+  .nuvem-promo-banner::before { content:''; position:absolute; inset:0; border-radius:18px; padding:1px; background:linear-gradient(135deg, rgba(251,191,36,.7), rgba(255,0,128,.55), rgba(251,191,36,.7)); background-size:220% 220%; -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none; animation:npbBorder 4.5s ease-in-out infinite; }
+  @keyframes npbBorder { 0%,100%{ background-position:0% 50%; } 50%{ background-position:100% 50%; } }
+  .npb-eyebrow { display:inline-flex; align-items:center; gap:7px; font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:#fbbf24; margin-bottom:9px; }
+  .npb-eyebrow .npb-dot { width:6px; height:6px; border-radius:999px; background:#fbbf24; box-shadow:0 0 10px #fbbf24; animation:npbBlink 1.6s ease-in-out infinite; }
+  @keyframes npbBlink { 0%,100%{ opacity:1; } 50%{ opacity:.3; } }
+  .npb-title { font-size:clamp(21px,3vw,26px); font-weight:800; letter-spacing:-.02em; line-height:1.15; }
+  .npb-title .grad { background:linear-gradient(135deg,#fbbf24,#FF0080); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .npb-sub { font-size:13.5px; color:rgba(255,255,255,.65); margin-top:7px; line-height:1.55; }
+  .npb-sub b { color:#fff; }
+  /* Chip discreto da promo dentro do card, junto ao preço */
+  .nuvem-promo { display:inline-flex; align-items:center; gap:6px; align-self:flex-start; margin:2px 0 12px; padding:4px 11px; border-radius:999px; font-size:11.5px; font-weight:700; color:#fbbf24; background:rgba(251,191,36,.09); border:1px solid rgba(251,191,36,.35); }
   .nuvem-value .nv-off { display:inline-block; margin-left:5px; font-weight:800; color:#34d399; background:rgba(52,211,153,.12); border:1px solid rgba(52,211,153,.3); border-radius:6px; padding:1px 7px; font-size:11px; }
   .plan-save { font-size:12.5px; color:#34d399; margin-bottom:36px; min-height:18px; }
   .plan-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px; max-width:980px; margin:0 auto; align-items:stretch; }
@@ -1719,6 +1729,11 @@
 
     <!-- ── 2) NUVEM ── -->
     <div class="plan-sec-head nuvem"><span class="ps-ico">☁️</span> Nuvem <small>player de estudo + storage das suas músicas + compartilhar biblioteca · <b>requer o Premium</b> · assinatura à parte</small></div>
+    <div class="nuvem-promo-banner" id="nuvemPromoBanner" hidden>
+      <div class="npb-eyebrow"><span class="npb-dot"></span> <span id="npbPrazo">Só hoje e amanhã</span></div>
+      <div class="npb-title">Compre 1, <span class="grad">leve 2</span></div>
+      <div class="npb-sub">Assine qualquer plano da Nuvem e leve <b>o dobro de tempo pelo mesmo preço</b> — no anual, são 2 anos pelo preço de 1.</div>
+    </div>
     <div style="text-align:center;">
       <div class="plan-toggle nuvem" id="nuvemToggle">
         <button data-cycle="Mensal">Mensal</button>
@@ -1842,6 +1857,11 @@
   })();
   var PROMO_NUVEM_DOBRO = (PROMO_HOJE_BRT === '2026-07-01' || PROMO_HOJE_BRT === '2026-07-02');
   var PROMO_ULTIMO_DIA  = (PROMO_HOJE_BRT === '2026-07-02'); // 02/07 = último dia da promo
+  var promoBanner=document.getElementById('nuvemPromoBanner');
+  if(promoBanner && PROMO_NUVEM_DOBRO){
+    promoBanner.hidden=false;
+    if(PROMO_ULTIMO_DIA) document.getElementById('npbPrazo').textContent='Último dia — acaba hoje';
+  }
 
   // Card de um tier da Nuvem (produto à parte, recorrente). data-plano = "Nuvem <Nome> <Ciclo>"
   // (casa com mp-config PLANOS_POR_NOME). Sempre mostra o nº de músicas (teto explícito).
@@ -1854,19 +1874,19 @@
     // do Essencial (base); Y = preço real. Ambos terminam em ,99. % de desconto vem do de/por.
     var baseEss=NUVEM_TIERS[0], baseRate=(nuvemCycle==='Anual'?baseEss.ano:baseEss.mes)/baseEss.musicas;
     var de=Math.floor(t.musicas*baseRate)+0.99, off=Math.round((1-preco/de)*100);
-    var oldHtml=(off>=1)?'<div class="plan-old">de '+br(de)+'</div>':'';
+    // Spacer invisível quando não tem "de R$..." → os 3 preços ficam na mesma altura.
+    var oldHtml=(off>=1)?'<div class="plan-old">de '+br(de)+'</div>':'<div class="plan-old" style="visibility:hidden;">.</div>';
     var valueLine=(off>=1)?'<div class="nuvem-value"><span class="nv-off">'+off+'% de desconto</span></div>':'';
     var promoHtml=PROMO_NUVEM_DOBRO
-      ? '<div class="nuvem-promo">🔥 Compre 1, leve 2 — '+(PROMO_ULTIMO_DIA?'só hoje, ÚLTIMO DIA!':'só hoje e amanhã!')+'<span>'+(nuvemCycle==='Anual'?'2 anos':'2 meses')+' pelo preço de 1</span></div>'
+      ? '<div class="nuvem-promo">🎁 '+(nuvemCycle==='Anual'?'2 anos':'2 meses')+' pelo preço de 1</div>'
       : '';
     return '<div class="plan-card nuvem'+(t.pop?' pop':'')+'">'+
       (t.pop?'<div class="plan-badge nuvem-badge">MAIS ESCOLHIDO</div>':'')+
-      promoHtml+
       '<div class="plan-name">Nuvem '+t.nome+'</div>'+
       '<div class="plan-tempo">player de estudo · storage · compartilhar</div>'+
       oldHtml+
       money(preco)+
-      '<div class="plan-cycle">'+per+'</div>'+sub+valueLine+
+      '<div class="plan-cycle">'+per+'</div>'+sub+promoHtml+valueLine+
       '<ul class="plan-feats">'+
         '<li>'+ck(true)+' <b>'+t.musicas+'</b> músicas na nuvem</li>'+
         '<li>'+ck(true)+' até <b>'+t.volunt+'</b> voluntários no app</li>'+
