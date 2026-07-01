@@ -57,6 +57,10 @@
   .nav-links a.nav-hot:hover { color: transparent; filter: brightness(1.25); }
   .nav-cta { padding: 9px 18px; border-radius: 10px; background: linear-gradient(135deg, #217DE6, #FF0080); color: #fff; font-weight: 600; font-size: 13px; transition: transform .15s, box-shadow .15s; white-space: nowrap; }
   .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 8px 30px -8px rgba(255,0,128,.6); }
+  .nav-actions { display:flex; align-items:center; gap:10px; }
+  .nav-login { padding:9px 16px; border-radius:10px; border:1px solid rgba(255,255,255,.18); color:#fff; font-weight:600; font-size:13px; transition:background .15s, border-color .15s; white-space:nowrap; }
+  .nav-login:hover { background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.32); }
+  @media (max-width:420px){ .nav-login { display:none; } }
   /* No celular os links de texto não cabem e geram scroll horizontal —
      escondemos a fileira e deixamos só a marca + "Comprar agora". */
   @media (max-width: 900px) {
@@ -695,6 +699,37 @@
   .sec-head-c h2 { font-size: clamp(30px,4.4vw,46px); font-weight:700; letter-spacing:-.03em; line-height:1.05; margin-bottom:16px; }
   .sec-head-c p { font-size:17px; line-height:1.55; color:rgba(255,255,255,.6); }
 
+  /* ===== Scale — o app da equipe ===== */
+  .scale-layout { display:grid; grid-template-columns:minmax(0,320px) 1fr; gap:52px; align-items:center; }
+  .scale-phones { display:flex; justify-content:center; align-items:flex-start; }
+  .scale-phone { width:200px; border-radius:26px; overflow:hidden; border:1px solid rgba(255,255,255,.12); background:#0b0b12; box-shadow:0 30px 70px -25px rgba(0,0,0,.85); flex-shrink:0; }
+  .scale-phone img { display:block; width:100%; height:auto; }
+  .scale-phone.up { margin-left:-72px; margin-top:38px; transform:rotate(3.5deg); z-index:2; }
+  .scale-feats { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .scale-card { display:flex; gap:14px; align-items:flex-start; padding:18px; border-radius:16px; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); transition:border-color .15s, background .15s, transform .15s; }
+  .scale-card:hover { border-color:rgba(255,255,255,.18); background:rgba(255,255,255,.05); transform:translateY(-2px); }
+  .sc-ico { flex-shrink:0; width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:22px; background:color-mix(in srgb, var(--i) 16%, transparent); border:1px solid color-mix(in srgb, var(--i) 38%, transparent); }
+  .sc-name { font-weight:700; font-size:15px; display:flex; align-items:center; gap:7px; flex-wrap:wrap; }
+  .sc-desc { font-size:13px; line-height:1.5; color:rgba(255,255,255,.6); margin-top:3px; }
+  .sc-tag { font-size:10px; font-weight:800; letter-spacing:.03em; text-transform:uppercase; color:#22d3ee; background:rgba(34,211,238,.12); border:1px solid rgba(34,211,238,.32); border-radius:6px; padding:1px 6px; }
+  .scale-foot { display:flex; flex-direction:column; align-items:center; gap:20px; margin-top:54px; }
+  .scale-badge { font-size:14px; font-weight:600; color:rgba(255,255,255,.8); padding:10px 20px; border-radius:999px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1); text-align:center; }
+  .scale-badge b { color:#fff; }
+  .scale-btns { display:flex; gap:14px; flex-wrap:wrap; justify-content:center; }
+  .scale-btn { padding:13px 26px; border-radius:12px; font-weight:700; font-size:15px; transition:transform .15s, box-shadow .15s, background .15s; white-space:nowrap; }
+  .scale-btn.primary { background:linear-gradient(135deg,#217DE6,#FF0080); color:#fff; }
+  .scale-btn.primary:hover { transform:translateY(-2px); box-shadow:0 14px 34px -10px rgba(255,0,128,.6); }
+  .scale-btn.ghost { background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.16); color:#fff; }
+  .scale-btn.ghost:hover { background:rgba(255,255,255,.1); transform:translateY(-2px); }
+  @media (max-width:860px){
+    .scale-layout { grid-template-columns:1fr; gap:36px; }
+    .scale-feats { grid-template-columns:1fr; }
+  }
+  @media (max-width:480px){
+    .scale-phone { width:172px; }
+    .scale-phone.up { margin-left:-60px; }
+  }
+
   /* ---------- PRODUTOS ---------- */
   .prod-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
   .prod-card {
@@ -907,10 +942,14 @@
       <a href="#como">Como funciona</a>
       <a href="#produtos">Módulos</a>
       <a href="#features">Telas</a>
+      <a href="#scale">Scale</a>
       <a href="#planos" class="nav-hot">Planos</a>
       <a href="#sobre">Sobre</a>
     </div>
-    <a class="nav-cta" href="#planos">Comprar agora</a>
+    <div class="nav-actions">
+      <a class="nav-login" href="https://scale.reaperautomate.com" target="_blank" rel="noopener">Entrar</a>
+      <a class="nav-cta" href="#planos">Comprar agora</a>
+    </div>
   </div>
 </nav>
 
@@ -1509,6 +1548,43 @@
     </div>
   </div>
 
+</section>
+
+<!-- ====================================================== -->
+<!-- SCALE — o app da equipe                                -->
+<!-- ====================================================== -->
+<section id="scale" class="sec-pad">
+  <div class="wrap">
+    <div class="sec-head-c">
+      <div class="eyebrow"><span class="dot"></span> Automate Scale · o app da equipe</div>
+      <h2>Sua equipe inteira <span class="gradient">organizada no celular.</span></h2>
+      <p>O Automate Pro não é só pra quem opera o REAPER. Com o <b>Automate Scale</b>, todo o ministério se organiza num app — escalas, repertório e avisos — e cada músico ainda estuda as músicas em casa.</p>
+    </div>
+
+    <div class="scale-layout">
+      <div class="scale-phones">
+        <div class="scale-phone"><img src="img/scale/inicio.jpg" alt="Tela inicial do app Automate Scale" loading="lazy" /></div>
+        <div class="scale-phone up"><img src="img/scale/notificacoes.jpg" alt="Notificações do Automate Scale" loading="lazy" /></div>
+      </div>
+
+      <div class="scale-feats">
+        <div class="scale-card"><div class="sc-ico" style="--i:#4F9BFF;">📅</div><div><div class="sc-name">Escalas &amp; confirmação</div><div class="sc-desc">Monte a escala do culto, escale a banda e cada um confirma presença no celular.</div></div></div>
+        <div class="scale-card"><div class="sc-ico" style="--i:#A855F7;">🎵</div><div><div class="sc-name">Repertório &amp; setlist</div><div class="sc-desc">Biblioteca com tom, BPM e letra. Monte o setlist do culto em segundos.</div></div></div>
+        <div class="scale-card"><div class="sc-ico" style="--i:#22d3ee;">🎧</div><div><div class="sc-name">Player de estudo <span class="sc-tag">Nuvem</span></div><div class="sc-desc">Cada músico estuda a própria parte pelas tracks separadas, direto do celular.</div></div></div>
+        <div class="scale-card"><div class="sc-ico" style="--i:#FF7A18;">🔔</div><div><div class="sc-name">Notificações no celular</div><div class="sc-desc">Fui escalado, escala editada, lembrete da véspera — a equipe nunca esquece.</div></div></div>
+        <div class="scale-card"><div class="sc-ico" style="--i:#34d399;">💬</div><div><div class="sc-name">Chat da equipe</div><div class="sc-desc">Converse com o time, mande avisos e combine os detalhes do culto.</div></div></div>
+        <div class="scale-card"><div class="sc-ico" style="--i:#f472b6;">👥</div><div><div class="sc-name">Times &amp; ministérios</div><div class="sc-desc">Organize por grupos (louvor, jovens…), cada um com escala e biblioteca próprios.</div></div></div>
+      </div>
+    </div>
+
+    <div class="scale-foot">
+      <div class="scale-badge">✨ Grátis no <b>Premium</b> · turbine o player com a <b>Nuvem</b></div>
+      <div class="scale-btns">
+        <a class="scale-btn primary" href="scale.html">Ver tudo que o Scale faz →</a>
+        <a class="scale-btn ghost" href="https://scale.reaperautomate.com" target="_blank" rel="noopener">Entrar no Scale ↗</a>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- ====================================================== -->
