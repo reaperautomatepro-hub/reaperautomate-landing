@@ -931,6 +931,18 @@
   /* fallback: se o JS não rodar, nada fica preso invisível */
   .no-js-reveal .reveal { opacity:1 !important; transform:none !important; }
   @media (prefers-reduced-motion: reduce){ .reveal, .reveal.out-up { opacity:1 !important; transform:none !important; } }
+
+  /* ---------- Galeria de Telas (abas) ---------- */
+  .feat-tabs { display:flex; flex-wrap:wrap; justify-content:center; gap:8px; max-width:920px; margin:0 auto 34px; padding:0 16px; }
+  .feat-tab { flex:0 0 auto; padding:9px 16px; border-radius:999px; font-size:13px; font-weight:600; color:rgba(255,255,255,.7); background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1); white-space:nowrap; cursor:pointer; transition:color .15s, border-color .15s, background .15s; }
+  .feat-tab:hover { color:#fff; border-color:rgba(255,255,255,.28); }
+  .feat-tab.on { color:#fff; background:linear-gradient(135deg,#217DE6,#FF0080); border-color:transparent; }
+  #features .feature-block.fb-hide { display:none !important; }
+  #features .feature-block .fb-tag { display:none; }
+
+  /* ---------- Isca de preço no hero ---------- */
+  .hero-price { margin-top:16px; font-size:14px; color:rgba(255,255,255,.8); text-shadow:0 2px 20px rgba(0,0,0,.6); }
+  .hero-price b { color:#fff; font-weight:700; }
 </style>
 </head>
 <body>
@@ -968,6 +980,7 @@
       <a class="btn-primary" href="#planos">Ver planos →</a>
       <a class="btn-ghost" href="#produtos">Conhecer os módulos ↓</a>
     </div>
+    <div class="hero-price">💳 A partir de <b>R$ 11,99/mês</b> · mensal, anual ou vitalício · 7 dias de garantia</div>
   </div>
   <div class="hero-credit">Automate Pro ao vivo · equipe de louvor</div>
 </section>
@@ -1372,7 +1385,10 @@
   <div class="feat-section-head">
     <div class="eyebrow"><span class="dot"></span> Por dentro de cada módulo</div>
     <h2 style="font-size:clamp(28px,4vw,42px); font-weight:700; letter-spacing:-.03em; line-height:1.08; margin-top:14px;">Veja o Automate Pro por dentro. <span class="gradient">Tela por tela.</span></h2>
+    <p style="font-size:14px; color:rgba(255,255,255,.5); margin-top:10px;">Toque numa aba pra ver cada recurso — sem rolar o site inteiro.</p>
   </div>
+
+  <div class="feat-tabs" id="featTabs"></div>
 
   <div class="feature-block">
     <div class="fb-text">
@@ -2975,6 +2991,31 @@ document.getElementById('apLogoArea').addEventListener('click', (e) => {
         go(destino);
       })
       .catch(function(){ clearTimeout(fb); go(destino); });
+  });
+})();
+</script>
+<script>
+/* ====== GALERIA DE TELAS (abas) — 1 recurso por vez, sem rolar 10 telas ====== */
+(function(){
+  var sec=document.getElementById('features');
+  var bar=document.getElementById('featTabs');
+  if(!sec || !bar) return;
+  var blocks=[].slice.call(sec.querySelectorAll('.feature-block'));
+  if(blocks.length<2) return;
+  blocks.forEach(function(b,i){
+    b.classList.add('in'); // não deixa o scroll-reveal segurar o painel invisível
+    var tag=b.querySelector('.fb-tag');
+    var label=tag ? tag.textContent.trim() : ('Tela '+(i+1));
+    var t=document.createElement('button');
+    t.type='button';
+    t.className='feat-tab'+(i===0?' on':'');
+    t.textContent=label;
+    t.addEventListener('click', function(){
+      blocks.forEach(function(bb,j){ bb.classList.toggle('fb-hide', j!==i); });
+      [].forEach.call(bar.children, function(x,j){ x.classList.toggle('on', j===i); });
+    });
+    bar.appendChild(t);
+    if(i!==0) b.classList.add('fb-hide');
   });
 })();
 </script>
