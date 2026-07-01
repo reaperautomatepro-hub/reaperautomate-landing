@@ -1868,7 +1868,19 @@
   function nuvemCard(t){
     var preco = nuvemCycle==='Anual' ? t.ano : t.mes;
     var per   = nuvemCycle==='Anual' ? 'por ano' : 'por mês';
-    var sub   = nuvemCycle==='Anual' ? '<div class="plan-cycle" style="color:#34d399;">≈ R$ '+(preco/12).toFixed(2).replace('.',',')+' por mês</div>' : '';
+    // "≈ por mês": na promo Compre 1 Leve 2 o tempo dobra → efetivo cai pela metade
+    // (anual /24 em vez de /12; mensal /2). Fora da promo, mensal não mostra a linha.
+    var fmtMes=function(v){ return 'R$ '+v.toFixed(2).replace('.',',') ; };
+    var mesCheio = nuvemCycle==='Anual' ? preco/12 : preco;
+    var sub='';
+    if(PROMO_NUVEM_DOBRO){
+      var mesPromo = mesCheio/2;
+      sub = '<div class="plan-cycle" style="color:#34d399;">≈ '+
+        (nuvemCycle==='Anual' ? '<s style="color:rgba(255,255,255,.38);">'+fmtMes(mesCheio)+'</s> ' : '')+
+        fmtMes(mesPromo)+' por mês com a promo</div>';
+    } else if(nuvemCycle==='Anual'){
+      sub = '<div class="plan-cycle" style="color:#34d399;">≈ '+fmtMes(mesCheio)+' por mês</div>';
+    }
     var plano = 'Nuvem '+t.nome+' '+nuvemCycle;
     // "de X por Y": X (preço cheio) = quanto esse tanto de músicas custaria no custo/música
     // do Essencial (base); Y = preço real. Ambos terminam em ,99. % de desconto vem do de/por.
