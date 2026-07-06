@@ -1590,7 +1590,7 @@
     <div class="scale-layout">
       <div class="scale-phones">
         <div class="scale-phone"><img src="img/scale/inicio.jpg" alt="Tela inicial do app Automate Scale" loading="lazy" /></div>
-        <div class="scale-phone up"><img src="img/scale/notificacoes.jpg" alt="Notificações do Automate Scale" loading="lazy" /></div>
+        <div class="scale-phone up"><img src="img/scale/player.webp" alt="Player de estudo multitrack do Automate Scale" loading="lazy" /></div>
       </div>
 
       <div class="scale-feats">
@@ -1604,6 +1604,7 @@
     </div>
 
     <div class="scale-foot">
+      <div class="scale-badge" id="scaleStats" hidden></div>
       <div class="scale-badge">✨ Grátis no <b>Premium</b> · turbine o player com a <b>Nuvem</b></div>
       <div class="scale-btns">
         <a class="scale-btn primary" href="scale.html">Ver tudo que o Scale faz →</a>
@@ -3054,6 +3055,25 @@ document.getElementById('apLogoArea').addEventListener('click', (e) => {
     bar.appendChild(t);
     if(i!==0) b.classList.add('fb-hide');
   });
+})();
+
+// Estatísticas ao vivo do Scale (arredondadas PRA BAIXO pelo servidor);
+// se a API falhar ou os números forem pequenos demais, o badge não aparece.
+(function(){
+  fetch('https://assistente.reaperautomate.com/api/scale-stats')
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if(!d || !d.ok) return;
+      var f=function(o){ return o.value.toLocaleString('pt-BR')+(o.plus?'+':''); };
+      var parts=[];
+      if(d.users && d.users.value>=10) parts.push('👥 <b>'+f(d.users)+'</b> músicos e líderes cadastrados');
+      if(d.minutes && d.minutes.value>=60) parts.push('🎧 <b>'+f(d.minutes)+'</b> minutos ensaiados no player');
+      if(!parts.length) return;
+      var el=document.getElementById('scaleStats');
+      el.innerHTML=parts.join(' &nbsp;·&nbsp; ');
+      el.hidden=false;
+    })
+    .catch(function(){});
 })();
 </script>
 </body>
