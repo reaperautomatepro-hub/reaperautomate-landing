@@ -8,47 +8,47 @@
 <link rel="icon" href="/logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { min-height: 100%; }
   body {
     font-family: 'Inter', system-ui, sans-serif;
-    background: radial-gradient(1100px 600px at 50% -10%, rgba(33,125,230,.18), transparent 60%), #07070a;
-    color: #fff;
+    background: radial-gradient(1100px 600px at 50% -10%, rgba(66,171,223,.16), transparent 60%), #07090C;
+    color: #E9EEF4;
     display: flex; align-items: center; justify-content: center;
     padding: 28px 18px;
     min-height: 100vh;
   }
   .card {
     width: 100%; max-width: 460px;
-    background: #0d0d14;
-    border: 1px solid rgba(255,255,255,.1);
-    border-radius: 20px;
+    background: #0E1319;
+    border: 1px solid rgba(160,200,235,.14);
+    border-radius: 12px;
     padding: 34px 30px;
     box-shadow: 0 24px 70px rgba(0,0,0,.55);
   }
-  .logo { display:block; height: 34px; margin: 0 auto 22px; }
+  .logo { display:block; height: 34px; margin: 0 auto 22px; filter: drop-shadow(0 0 10px rgba(66,171,223,.5)); }
   .badge {
     display:inline-block; font-size: 11.5px; font-weight: 700; letter-spacing: .5px;
-    color:#67e8f9; background: rgba(103,232,249,.1); border:1px solid rgba(103,232,249,.28);
-    padding: 5px 11px; border-radius: 999px; margin-bottom: 14px;
+    color:#42ABDF; background: rgba(66,171,223,.1); border:1px solid rgba(66,171,223,.32);
+    padding: 5px 11px; border-radius: 6px; margin-bottom: 14px;
   }
-  h1 { font-size: 25px; font-weight: 800; line-height: 1.2; margin-bottom: 10px; }
-  h1 b { background: linear-gradient(135deg,#7cc0ff,#ff6bb0); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+  h1 { font-family:'Archivo','Inter',sans-serif; font-stretch:114%; font-size: 25px; font-weight: 800; line-height: 1.2; margin-bottom: 10px; }
+  h1 b { background: linear-gradient(115deg,#42ABDF,#8FE0FF); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
   .preco { display:flex; align-items:baseline; gap:10px; margin: 6px 0 16px; }
   .preco .de { color:#8b8b9e; text-decoration: line-through; font-size: 15px; }
   .preco .por { font-size: 32px; font-weight: 800; }
   .preco .ano { color:#a0a0b0; font-size: 13px; }
   ul { list-style:none; margin: 0 0 20px; display:flex; flex-direction:column; gap:9px; }
   li { font-size: 13.5px; color:#cfcfe0; display:flex; gap:9px; align-items:flex-start; line-height:1.5; }
-  li::before { content:"✓"; color:#2ECF71; font-weight:800; flex-shrink:0; }
+  li::before { content:"✓"; color:#42ABDF; font-weight:800; flex-shrink:0; }
   input {
     width:100%; box-sizing:border-box; margin-bottom:12px; padding:13px 14px;
-    background:#15151f; border:1px solid rgba(255,255,255,.12); border-radius:10px;
-    color:#fff; font-size:14px; font-family:inherit;
+    background:#151C25; border:1px solid rgba(255,255,255,.12); border-radius:8px;
+    color:#E9EEF4; font-size:14px; font-family:inherit;
   }
-  input:focus { outline:none; border-color: rgba(103,232,249,.55); }
+  input:focus { outline:none; border-color: rgba(66,171,223,.6); }
   .aviso {
     margin:2px 0 16px; font-size:12.5px; color:#E6B422; line-height:1.5;
     background:rgba(230,180,34,.08); border:1px solid rgba(230,180,34,.25);
@@ -58,8 +58,8 @@
     background:rgba(255,107,107,.08); border:1px solid rgba(255,107,107,.32);
     border-radius:9px; padding:9px 12px; line-height:1.45; }
   button {
-    width:100%; padding:15px; border:none; border-radius:11px;
-    background:linear-gradient(135deg,#217DE6,#FF0080); color:#fff;
+    width:100%; padding:15px; border:none; border-radius:8px;
+    background:#42ABDF; color:#06121B;
     font-size:15.5px; font-weight:700; cursor:pointer; font-family:inherit;
   }
   button:disabled { opacity:.7; cursor:default; }
