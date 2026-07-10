@@ -94,9 +94,10 @@
   @media (max-width:560px){ .stats { flex-direction:column; gap:24px; } .stat-div { width:auto; height:1px; } }
 
   /* print paisagem do player */
-  .landshot { margin-top:56px; text-align:center; }
-  .landshot img { border-radius:10px; border:1px solid var(--line2); box-shadow:0 30px 80px -25px rgba(0,0,0,.85); margin:0 auto; }
-  .landshot p { margin-top:14px; font-family:var(--mono); font-size:11.5px; color:var(--dim); letter-spacing:.03em; }
+  .phonerow { margin-top:56px; display:flex; justify-content:center; gap:52px; flex-wrap:wrap; }
+  .phonerow figure { margin:0; }
+  .phonerow .phone { width:250px; }
+  .phonerow figcaption { margin-top:14px; text-align:center; font-family:var(--mono); font-size:11.5px; color:var(--dim); letter-spacing:.03em; }
 
   /* section base */
   .sec { padding:64px 0; }
@@ -245,11 +246,17 @@
         </div>
         <p style="margin-top:10px;font-size:13px;color:var(--dim);">Demonstração aberta, sem cadastro — com a música “Teu Rio” (Cnct Music) em multitrack.</p>
       </div>
-      <div class="phone"><img src="img/scale/player.webp" alt="Player de estudo multitrack do Automate Scale — faixas separadas, mapa da música e controles de tom e BPM" loading="lazy" /></div>
+      <div class="phone"><img src="img/scale/player.webp" alt="Player de estudo multitrack do Automate Scale — faixas separadas com forma de onda, mapa da música por seções e filtros Tudo, Sem Baixo e Só Baixo" loading="lazy" /></div>
     </div>
-    <div class="landshot">
-      <img src="img/scale/player-land.webp" alt="Player do Automate Scale na horizontal — mapa completo da música com abas Mixer e Letra" loading="lazy" />
-      <p>Deitou o celular? O player vira uma mesa de ensaio — mapa inteiro da música, abas Mixer e Letra.</p>
+    <div class="phonerow">
+      <figure>
+        <div class="phone"><img src="img/scale/player-mixer.webp" alt="Aba Mixer do player do Automate Scale — mesa de som com fader, pan, mudo e solo por instrumento e medidores de volume" loading="lazy" /></div>
+        <figcaption>Aba Mixer — mesa de som de verdade, com medidores por faixa.</figcaption>
+      </figure>
+      <figure>
+        <div class="phone"><img src="img/scale/player-letra.webp" alt="Aba Letra do player do Automate Scale — letra sincronizada com o áudio, destacando a linha atual da música" loading="lazy" /></div>
+        <figcaption>Aba Letra — a linha atual acompanha a música, tipo karaokê.</figcaption>
+      </figure>
     </div>
   </div>
 </section>
