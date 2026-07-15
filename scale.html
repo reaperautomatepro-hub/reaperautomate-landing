@@ -207,11 +207,7 @@
 <!-- NÚMEROS (preenchidos ao vivo pela API; escondidos se a busca falhar) -->
 <section class="statsband" id="statsband" aria-hidden="true">
   <div class="wrap">
-    <div class="stats">
-      <div class="stat" id="statUsersBox"><div class="stat-n gradient" id="statUsers">0</div><div class="stat-l">músicos e líderes cadastrados</div></div>
-      <div class="stat-div" id="statDiv"></div>
-      <div class="stat" id="statMinutesBox"><div class="stat-n gradient" id="statMinutes">0</div><div class="stat-l">minutos de ensaio no player de estudo</div></div>
-    </div>
+    <div class="stats" id="statsRow"></div>
   </div>
 </section>
 
@@ -340,8 +336,8 @@
 </footer>
 
 <script>
-// Estatísticas ao vivo (usuários + minutos ensaiados), sempre arredondadas
-// PRA BAIXO pelo servidor. Se a API falhar, a faixa simplesmente não aparece.
+// Estatísticas ao vivo (usuários + escalas geradas + minutos ensaiados), sempre
+// arredondadas PRA BAIXO pelo servidor. Se a API falhar, a faixa não aparece.
 (function () {
   function animate(el, target, plus) {
     var t0 = null, dur = 1400;
@@ -358,18 +354,25 @@
     .then(function (r) { return r.json(); })
     .then(function (d) {
       if (!d || !d.ok) return;
-      // Números pequenos demais não vendem — cada stat só aparece com volume real.
-      var showUsers = d.users && d.users.value >= 10;
-      var showMin = d.minutes && d.minutes.value >= 60;
-      if (!showUsers && !showMin) return;
-      if (!showUsers) document.getElementById('statUsersBox').style.display = 'none';
-      if (!showMin) document.getElementById('statMinutesBox').style.display = 'none';
-      if (!showUsers || !showMin) document.getElementById('statDiv').style.display = 'none';
+      // Cada stat só entra com volume real (números pequenos não vendem).
+      var items = [
+        { key: 'users',     min: 10, stat: d.users,     label: 'músicos e líderes cadastrados' },
+        { key: 'schedules', min: 10, stat: d.schedules, label: 'escalas geradas' },
+        { key: 'minutes',   min: 60, stat: d.minutes,   label: 'minutos de ensaio no player de estudo' }
+      ].filter(function (it) { return it.stat && it.stat.value >= it.min; });
+      if (!items.length) return;
+      var row = document.getElementById('statsRow');
+      row.innerHTML = items.map(function (it, i) {
+        return (i ? '<div class="stat-div"></div>' : '') +
+          '<div class="stat"><div class="stat-n gradient" id="sn_' + it.key + '">0</div>' +
+          '<div class="stat-l">' + it.label + '</div></div>';
+      }).join('');
       var band = document.getElementById('statsband');
       band.classList.add('show');
       band.removeAttribute('aria-hidden');
-      if (showUsers) animate(document.getElementById('statUsers'), d.users.value, d.users.plus);
-      if (showMin) animate(document.getElementById('statMinutes'), d.minutes.value, d.minutes.plus);
+      items.forEach(function (it) {
+        animate(document.getElementById('sn_' + it.key), it.stat.value, it.stat.plus);
+      });
     })
     .catch(function () {});
 })();
