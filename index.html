@@ -3041,9 +3041,15 @@ document.getElementById('apLogoArea').addEventListener('click', (e) => {
       elTel=document.getElementById('coTel'), elEmail=document.getElementById('coEmail'),
       btn=document.getElementById('coBtn'), elErr=document.getElementById('coErr');
   var destino='', destinoTipo='unico';
+  // Renovação vinda do Automate Pro (botão "Renovar agora" no REAPER):
+  // ?renovar=1&email=...&plano=... — já chega sabendo quem é a pessoa.
+  var RN=(function(){ try{ return new URLSearchParams(location.search); }catch(e){ return null; } })();
+  var preEmail = RN && RN.get('renovar') ? (RN.get('email')||'') : '';
   function erro(msg, campo){ elErr.textContent=msg; elErr.style.display='block'; if(campo){ campo.focus(); campo.style.borderColor='rgba(255,107,107,.6)'; } }
   function limpaErro(){ elErr.style.display='none'; [elNome,elTel,elEmail].forEach(function(c){ c.style.borderColor='rgba(255,255,255,.12)'; }); }
-  function abrir(url, plano, tipo){ destino=url; destinoTipo=tipo||'unico'; elPlano.textContent=plano||''; limpaErro(); modal.style.display='flex'; setTimeout(function(){elNome.focus();},60); }
+  function abrir(url, plano, tipo){ destino=url; destinoTipo=tipo||'unico'; elPlano.textContent=plano||''; limpaErro();
+    if(preEmail && !elEmail.value){ elEmail.value=preEmail; } // renovação: e-mail já vem pronto
+    modal.style.display='flex'; setTimeout(function(){ (preEmail?elNome:elNome).focus(); },60); }
   function fechar(){ modal.style.display='none'; btn.disabled=false; btn.textContent='Continuar pro pagamento →'; }
   // intercepta os botões de compra (delegação — funciona com os cards gerados dinamicamente)
   document.addEventListener('click', function(e){
@@ -3082,6 +3088,39 @@ document.getElementById('apLogoArea').addEventListener('click', (e) => {
       })
       .catch(function(){ clearTimeout(fb); go(destino); });
   });
+
+  // ===== Renovação dirigida (veio do REAPER com ?renovar=1) =====
+  // Rola pros planos, dá as boas-vindas de volta e destaca o plano que a pessoa
+  // já tinha. O e-mail some da URL depois (não fica exposto no histórico/print).
+  if(RN && RN.get('renovar')){
+    var norm=function(s){ return (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,' ').trim(); };
+    var plano=RN.get('plano')||'', motivo=RN.get('motivo')||'';
+    setTimeout(function(){
+      var sec=document.getElementById('planos'); if(!sec) return;
+      // banner de boas-vindas
+      var b=document.createElement('div');
+      b.style.cssText='max-width:720px;margin:0 auto 26px;padding:16px 20px;border:1px solid rgba(66,171,223,.4);background:linear-gradient(135deg,rgba(66,171,223,.14),rgba(56,212,200,.10));border-radius:12px;color:#dfe8f2;font-size:14.5px;line-height:1.55;text-align:center;';
+      var qual = motivo==='nuvem_vencida' ? 'sua Nuvem' : 'seu plano';
+      b.innerHTML='<b style="color:#8FE0FF;">👋 Bem-vindo de volta!</b> É rapidinho renovar '+qual+' — escolha abaixo.'+
+        (preEmail?(' Seu e-mail <b style="color:#cfeafc;">'+preEmail.replace(/[<>&]/g,'')+'</b> já vem pronto no checkout.'):'');
+      sec.insertBefore(b, sec.firstElementChild);
+      sec.scrollIntoView({behavior:'smooth', block:'start'});
+      // destaca o card do plano que ela tinha
+      if(plano){
+        var alvo=norm(plano), best=null;
+        [].forEach.call(document.querySelectorAll('.js-checkout[data-plano]'), function(a){
+          var dp=norm(a.getAttribute('data-plano'));
+          if(dp && (dp===alvo || dp.indexOf(alvo)>=0 || alvo.indexOf(dp)>=0)) best=a;
+        });
+        if(best){
+          var card=best.closest('.plan-card')||best.closest('[class*="plan"]')||best.parentElement;
+          if(card){ card.style.outline='2px solid #42ABDF'; card.style.outlineOffset='3px'; card.style.borderRadius='14px'; card.style.boxShadow='0 0 0 6px rgba(66,171,223,.12)'; }
+        }
+      }
+      // limpa a URL (tira e-mail/plano do endereço), mantendo a âncora #planos
+      try{ history.replaceState(null,'','/#planos'); }catch(e){}
+    }, 350);
+  }
 })();
 </script>
 <script>
