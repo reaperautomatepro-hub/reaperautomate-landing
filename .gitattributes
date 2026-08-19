@@ -1,0 +1,36 @@
+# ============================================================
+#  Normalização de fim de linha — Windows <-> Mac
+#  Guarda tudo em LF no repositório; cada máquina recebe o
+#  que precisa. Evita o arquivo inteiro aparecer como
+#  "modificado" só por causa de CRLF.
+# ============================================================
+
+* text=auto eol=lf
+
+# --- Windows exige CRLF nestes, senão quebram ---
+*.bat  text eol=crlf
+*.cmd  text eol=crlf
+*.ps1  text eol=crlf
+*.iss  text eol=crlf
+
+# --- Mac/Linux exigem LF ---
+*.sh       text eol=lf
+*.command  text eol=lf
+
+# --- Binários: não mexer ---
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.pdf  binary
+*.exe  binary
+*.dll  binary
+*.zip  binary
+*.mp3  binary
+*.mp4  binary
+*.wav  binary
+*.ttf  binary
+*.otf  binary
+*.woff binary
+*.woff2 binary
