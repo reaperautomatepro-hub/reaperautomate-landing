@@ -995,6 +995,24 @@
   #features .feature-block.fb-hide { display:none !important; }
   #features .feature-block .fb-tag { display:none; }
 
+  /* ---------- CAMPANHA DE ANIVERSÁRIO (só na data; some sozinha depois) ---------- */
+  .bday-bar { position:relative; z-index:60; display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:10px 16px; padding:11px 20px; text-align:center;
+    background:linear-gradient(100deg, rgba(66,171,223,.20), rgba(56,212,200,.16) 55%, rgba(230,180,34,.16));
+    border-bottom:1px solid rgba(66,171,223,.35); font-size:13.5px; line-height:1.5; color:var(--text); }
+  .bday-bar .bb-emoji { font-size:17px; line-height:1; }
+  .bday-bar .bb-txt { color:rgba(233,238,244,.86); }
+  .bday-bar .bb-txt b { color:var(--text); }
+  .bday-bar .bb-txt b.bb-hi { color:var(--accent-hi); }
+  .bday-bar .bb-cta { padding:6px 15px; border-radius:7px; background:var(--accent); color:var(--accent-ink); font-weight:700; font-size:12.5px; white-space:nowrap; transition:transform .15s, background .15s; }
+  .bday-bar .bb-cta:hover { transform:translateY(-1px); background:var(--accent-hi); }
+  .bday-bar .bb-only { font-family:var(--mono); font-size:10.5px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); border:1px solid rgba(66,171,223,.4); border-radius:5px; padding:3px 9px; white-space:nowrap; }
+  @media (max-width:720px){ .bday-bar { font-size:12.5px; padding:10px 14px; gap:8px 12px; } .bday-bar .bb-only { display:none; } }
+  .hero-promo { display:inline-flex; align-items:center; gap:9px; flex-wrap:wrap; justify-content:center; margin-top:16px; padding:9px 16px; border-radius:8px;
+    background:rgba(66,171,223,.12); border:1px solid rgba(66,171,223,.4); font-size:13.5px; line-height:1.5; color:rgba(233,238,244,.9); text-shadow:none; }
+  .hero-promo b { color:var(--text); }
+  .hero-promo b.hp-hi { color:var(--accent-hi); }
+  .nuvem-promo-banner.pro { border-left-color:var(--accent); margin-bottom:26px; }
+
   /* ---------- Isca de preço no hero ---------- */
   .hero-price { margin-top:18px; font-family:var(--mono); font-size:12.5px; color:var(--muted); text-shadow:0 2px 20px rgba(0,0,0,.6); letter-spacing:.02em; }
   .hero-price b { color:var(--accent); font-weight:600; }
@@ -1003,6 +1021,29 @@
 <body>
 
 <div id="playline"></div>
+
+<!-- CAMPANHA DE ANIVERSÁRIO — aparece só na data (ver AP_PROMO logo abaixo) -->
+<div class="bday-bar" id="bdayBar" hidden>
+  <span class="bb-emoji">🎂</span>
+  <span class="bb-txt"><b>Hoje é meu aniversário</b> — e quem ganha o presente é você: <b class="bb-hi">todo plano recorrente vem em dobro</b>. Automate Pro e Nuvem: comprou 1 mês, leva 2 · comprou 1 ano, leva 2.</span>
+  <a class="bb-cta" href="#planos">Ver planos →</a>
+  <span class="bb-only">só hoje</span>
+</div>
+<script>
+  /* Data única da campanha (BRT). Pra desligar, basta esvaziar a string.
+     O DOBRO de verdade é aplicado no webhook (server-side) — aqui é só a vitrine. */
+  window.AP_PROMO = (function(){
+    var DATA_PROMO = '2026-09-02';
+    var hoje = '';
+    try { hoje = new Date().toLocaleDateString('en-CA', { timeZone:'America/Sao_Paulo' }); } catch(e){}
+    var on = !!DATA_PROMO && hoje === DATA_PROMO;
+    if(on){
+      var b = document.getElementById('bdayBar');
+      if(b) b.hidden = false;
+    }
+    return { on: on, hoje: hoje };
+  })();
+</script>
 
 <nav>
   <div class="nav-inner">
@@ -1040,6 +1081,8 @@
       <a class="btn-ghost" href="#produtos">Conhecer os módulos</a>
     </div>
     <div class="hero-price">A partir de <b>R$ 11,99/mês</b> · mensal, anual ou vitalício · 7 dias de garantia</div>
+    <div class="hero-promo" id="heroPromo" hidden>🎂 <span><b>Campanha de aniversário</b> — só hoje, mensal e anual vêm <b class="hp-hi">em dobro</b> pelo mesmo preço. Compre 1, leve 2.</span></div>
+    <script>if(window.AP_PROMO && window.AP_PROMO.on){ var _hp=document.getElementById('heroPromo'); if(_hp) _hp.hidden=false; }</script>
     <div class="hero-eq" id="heroEq" aria-hidden="true"></div>
   </div>
   <div class="hero-credit">Automate Pro ao vivo · equipe de louvor</div>
@@ -1778,6 +1821,11 @@
 
     <!-- ── 1) DESKTOP: Automate Pro ── -->
     <div class="plan-sec-head">Automate Pro <small>a ferramenta que automatiza o seu REAPER no palco</small></div>
+    <div class="nuvem-promo-banner pro" id="proPromoBanner" hidden>
+      <div class="npb-eyebrow"><span class="npb-dot"></span> <span>Só hoje · aniversário</span></div>
+      <div class="npb-title">Compre 1, <span class="grad">leve 2</span></div>
+      <div class="npb-sub">No <b>Mensal</b> e no <b>Anual</b> o tempo vem <b>em dobro pelo mesmo preço</b> — 1 mês vira 2, 1 ano vira 2 anos. No <b>Vitalício</b> (que já é pra sempre), o bônus de Nuvem é que dobra: <b>2 meses de Nuvem Plus</b>.</div>
+    </div>
     <div style="text-align:center;">
       <div class="plan-toggle" id="planToggle">
         <button data-cycle="Mensal">Mensal</button>
@@ -1794,7 +1842,7 @@
     <!-- ── 2) NUVEM ── -->
     <div class="plan-sec-head nuvem">Nuvem <small>player de estudo + storage das suas músicas + compartilhar biblioteca · <b>requer o Premium</b> · assinatura à parte</small></div>
     <div class="nuvem-promo-banner" id="nuvemPromoBanner" hidden>
-      <div class="npb-eyebrow"><span class="npb-dot"></span> <span id="npbPrazo">Só hoje e amanhã</span></div>
+      <div class="npb-eyebrow"><span class="npb-dot"></span> <span id="npbPrazo">Só hoje · aniversário</span></div>
       <div class="npb-title">Compre 1, <span class="grad">leve 2</span></div>
       <div class="npb-sub">Assine qualquer plano da Nuvem e leve <b>o dobro de tempo pelo mesmo preço</b> — no anual, são 2 anos pelo preço de 1.</div>
     </div>
@@ -1882,11 +1930,24 @@
   function standardCard(p){
     var feat=/premium/i.test(p.nome||'') || (p.f_web&&p.f_manager&&p.f_nuvem);
     var cyc = p.tempo==='Mensal'?'acesso por 1 mês' : p.tempo==='Anual'?'acesso por 1 ano' : 'pagamento único · vitalício';
-    var sub='';
-    if(p.tempo==='Anual'){ var m=(parseFloat(p.valor)||0)/12; sub='<div class="plan-cycle" style="color:#34d399;">≈ R$ '+m.toFixed(2).replace('.',',')+' por mês</div>'; }
+    var sub='', vNum=parseFloat(p.valor)||0;
+    var fmtMes=function(v){ return 'R$ '+v.toFixed(2).replace('.',','); };
+    var mesCheio = p.tempo==='Anual' ? vNum/12 : (p.tempo==='Mensal' ? vNum : 0);
+    if(PROMO_ANIVERSARIO && mesCheio>0){
+      // na promo o período dobra -> o custo por mês efetivo é metade
+      sub='<div class="plan-cycle" style="color:#34d399;">≈ <s style="color:rgba(255,255,255,.38);">'+fmtMes(mesCheio)+'</s> '+fmtMes(mesCheio/2)+' por mês com a promo</div>';
+    } else if(p.tempo==='Anual'){
+      sub='<div class="plan-cycle" style="color:#34d399;">≈ '+fmtMes(mesCheio)+' por mês</div>';
+    }
     var v=parseFloat(p.valor)||0, anc=anchorFor(p), hasOff=anc>v+0.01;
     var oldHtml=hasOff?'<div class="plan-old">de '+br(anc)+'</div>':'';
     var offHtml=hasOff?'<div class="plan-off">economize '+br(anc-v)+' · '+Math.round((anc-v)/anc*100)+'% off</div>':'';
+    var promoHtml='';
+    if(PROMO_ANIVERSARIO){
+      promoHtml = (p.tempo==='Vitalício')
+        ? '<div class="nuvem-promo">bônus de Nuvem em dobro</div>'
+        : '<div class="nuvem-promo">'+(p.tempo==='Anual'?'2 anos':'2 meses')+' pelo preço de 1</div>';
+    }
     var lim=parseInt(p.limite,10)||1;
     var maqHtml='<div class="plan-machines'+(lim>1?' multi':'')+'"><b>'+lim+'</b> '+(lim>1?'máquinas':'máquina')+'</div>';
     var upHtml='';
@@ -1909,7 +1970,9 @@
     // (Quem já tem Nuvem ativa recebe o equivalente em extensão — regra aplicada no backend.)
     if(/premium/i.test(p.nome||'')){
       if(p.tempo==='Anual')     perk += '<li class="hi cloud">'+ck(true)+CLOUD_ICO+'<span><b>1 mês de Nuvem Essencial</b> grátis · 30 músicas · 25 voluntários</span></li>';
-      if(p.tempo==='Vitalício') perk += '<li class="hi cloud">'+ck(true)+CLOUD_ICO+'<span><b>1 mês de Nuvem Plus</b> grátis · 120 músicas · 60 voluntários</span></li>';
+      // Na promo de aniversário o Vitalício ganha o bônus EM DOBRO (2 meses de Plus) —
+      // é a forma dele entrar na campanha, já que "pra sempre" não tem como dobrar.
+      if(p.tempo==='Vitalício') perk += '<li class="hi cloud">'+ck(true)+CLOUD_ICO+'<span><b>'+(PROMO_ANIVERSARIO?'2 meses':'1 mês')+' de Nuvem Plus</b> grátis · 120 músicas · 60 voluntários</span></li>';
     }
     return '<div class="plan-card'+(feat?' feat':'')+'">'+
       (feat?'<div class="plan-badge">MAIS COMPLETO</div>':'')+
@@ -1917,7 +1980,7 @@
       '<div class="plan-tempo">'+(p.desc||'')+'</div>'+
       oldHtml+
       money(p.valor)+
-      '<div class="plan-cycle">'+cyc+'</div>'+sub+offHtml+
+      '<div class="plan-cycle">'+cyc+'</div>'+sub+offHtml+promoHtml+
       maqHtml+upHtml+
       '<ul class="plan-feats">'+feats+perk+'</ul>'+
       ctaHtml(p)+
@@ -1931,17 +1994,14 @@
     grid.innerHTML=list.map(standardCard).join('');
   }
 
-  // PROMO "compre 1, leve 2" na Nuvem — só 01 e 02/07/2026 (horário de Brasília).
-  // Some sozinho depois. O DOBRO de verdade é aplicado no webhook (server-side).
-  var PROMO_HOJE_BRT = (function(){
-    try { return new Date().toLocaleDateString('en-CA', { timeZone:'America/Sao_Paulo' }); } catch(e){ return ''; }
-  })();
-  var PROMO_NUVEM_DOBRO = (PROMO_HOJE_BRT === '2026-07-01' || PROMO_HOJE_BRT === '2026-07-02');
-  var PROMO_ULTIMO_DIA  = (PROMO_HOJE_BRT === '2026-07-02'); // 02/07 = último dia da promo
-  var promoBanner=document.getElementById('nuvemPromoBanner');
-  if(promoBanner && PROMO_NUVEM_DOBRO){
-    promoBanner.hidden=false;
-    if(PROMO_ULTIMO_DIA) document.getElementById('npbPrazo').textContent='Último dia — acaba hoje';
+  // PROMO ANIVERSÁRIO "compre 1, leve 2" — vale pro Automate Pro (Mensal/Anual) E
+  // pra Nuvem. A data única vive em window.AP_PROMO (topo da página); some sozinha
+  // depois. O DOBRO de verdade é aplicado no webhook (server-side).
+  var PROMO_ANIVERSARIO = !!(window.AP_PROMO && window.AP_PROMO.on);
+  var PROMO_NUVEM_DOBRO = PROMO_ANIVERSARIO;
+  if(PROMO_ANIVERSARIO){
+    var bPro=document.getElementById('proPromoBanner');   if(bPro) bPro.hidden=false;
+    var bNuv=document.getElementById('nuvemPromoBanner'); if(bNuv) bNuv.hidden=false;
   }
 
   // Card de um tier da Nuvem (produto à parte, recorrente). data-plano = "Nuvem <Nome> <Ciclo>"
@@ -1993,6 +2053,12 @@
   function renderNuvem(){ nuvemGrid.innerHTML=NUVEM_TIERS.map(nuvemCard).join(''); }
 
   function updateSave(){
+    if(PROMO_ANIVERSARIO){
+      saveEl.textContent = (cycle==='Vitalício')
+        ? '🎂 Aniversário: o bônus de Nuvem vem em dobro — 2 meses de Nuvem Plus.'
+        : '🎂 Aniversário: '+(cycle==='Anual'?'2 anos':'2 meses')+' pelo preço de 1 — o tempo vem em dobro.';
+      return;
+    }
     if(cycle!=='Anual'){ saveEl.textContent=''; return; }
     saveEl.textContent='2 meses grátis + mais máquinas que o mensal — melhor custo-benefício.';
   }
