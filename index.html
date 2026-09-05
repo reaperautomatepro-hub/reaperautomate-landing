@@ -996,6 +996,10 @@
   #features .feature-block .fb-tag { display:none; }
 
   /* ---------- CAMPANHA DE ANIVERSÁRIO (só na data; some sozinha depois) ---------- */
+  /* O `hidden` do HTML só vale display:none pela folha do navegador — qualquer
+     `display` declarado aqui embaixo ganha dele e o banner reaparece fora da data.
+     Esta linha segura isso pra qualquer elemento com display próprio. */
+  [hidden] { display:none !important; }
   .bday-bar { position:relative; z-index:60; display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:10px 16px; padding:11px 20px; text-align:center;
     background:linear-gradient(100deg, rgba(66,171,223,.20), rgba(56,212,200,.16) 55%, rgba(230,180,34,.16));
     border-bottom:1px solid rgba(66,171,223,.35); font-size:13.5px; line-height:1.5; color:var(--text); }
