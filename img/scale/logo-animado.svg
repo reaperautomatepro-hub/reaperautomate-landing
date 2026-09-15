@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="195 195 1564 1564" role="img" aria-labelledby="title">
+  <title id="title">Automate Scale</title>
+  <!-- Mesma arte e movimento de Automate Scale/app/src/components/Carregando.vue.
+       O viewBox aproxima a marca sem cortar o disco durante a animação. -->
+  <style>
+    .disco { transform-origin: 977px 977px; animation: scaleDisco 1.9s ease-in-out infinite; }
+    .fader { animation: scaleLado 1.9s cubic-bezier(0.3, 0, 0.2, 1) 0.18s infinite; }
+    .f2 { animation-delay: 0.24s; }
+    .f1 { animation-name: scaleMeio; animation-delay: 0.3s; }
+    @keyframes scaleDisco {
+      0%, 6.44% { transform: scale(1); }
+      18.25%, 23.62% { transform: scale(1.035); }
+      32.75% { transform: scale(0.988); }
+      42.95% { transform: scale(1.006); }
+      53.68%, 100% { transform: scale(1); }
+    }
+    @keyframes scaleLado {
+      0% { transform: translateX(0); }
+      18.53% { transform: translateX(-90px); }
+      39.37% { transform: translateX(21px); }
+      57.89%, 100% { transform: translateX(0); }
+    }
+    @keyframes scaleMeio {
+      0% { transform: translateX(0); }
+      21.79% { transform: translateX(106px); }
+      43.58% { transform: translateX(-23px); }
+      60.53%, 100% { transform: translateX(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .disco, .fader { animation: none; }
+    }
+  </style>
+  <circle class="disco" cx="977" cy="977" r="731" fill="#42abdf"/>
+  <rect x="337" y="461" width="1283" height="127" rx="63.5" fill="#fff"/>
+  <rect x="337" y="911" width="1283" height="127" rx="63.5" fill="#fff"/>
+  <rect x="337" y="1359" width="1283" height="127" rx="63.5" fill="#fff"/>
+  <rect class="fader f0" x="1045" y="336" width="384" height="384" rx="65" fill="#fff"/>
+  <rect class="fader f1" x="590" y="783" width="384" height="384" rx="65" fill="#fff"/>
+  <rect class="fader f2" x="1040" y="1235" width="384" height="384" rx="65" fill="#fff"/>
+</svg>
