@@ -1,0 +1,21 @@
+/* A real, silent player recording inside the existing phone hardware. */
+[data-scale-demo]{min-width:0}
+[data-scale-demo] .scale-demo-screen{position:relative;width:100%;aspect-ratio:390/844;border:1px solid #03050a;border-radius:17px;background:#07090e;overflow:hidden;box-shadow:0 0 0 1px #ffffff08}
+[data-scale-demo] .scale-demo-screen .scale-demo-poster,
+[data-scale-demo] .scale-demo-screen .scale-demo-video{display:block;width:100%;height:100%;aspect-ratio:390/844;object-fit:contain;margin:0;border:0;border-radius:0;background:#07090e}
+[data-scale-demo] .scale-demo-screen .scale-demo-video{position:absolute;inset:0;visibility:hidden}
+[data-scale-demo].has-started .scale-demo-video{visibility:visible}
+[data-scale-demo].is-unavailable .scale-demo-video{visibility:hidden}
+.scale-demo-actions{display:flex;flex-direction:column;align-items:center;gap:6px;margin:13px -5px 0;text-align:center}
+.scale-demo-toggle{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:38px;max-width:100%;padding:6px 10px;border:1px solid #385268;border-radius:4px;background:#14222e;color:#dceef9;font:500 11px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;cursor:pointer;letter-spacing:0}
+.scale-demo-toggle:hover{background:#1b3345;border-color:#42abdf}
+.scale-demo-toggle:focus-visible{outline:3px solid #42abdf;outline-offset:4px}
+.scale-demo-toggle[hidden]{display:none}
+.scale-demo-icon{width:10px;font-size:10px}
+.scale-demo-status{font:11px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#a6b2c0}
+.scale-demo-status:empty{display:none}
+#scale .scale-shots>.scale-motion{margin-top:54px}
+#scale .scale-phones>.scale-motion{margin-top:42px}
+#scale .scale-motion .phone-shell{width:100%;margin:0;transform:none}
+@media(max-width:1100px) and (min-width:801px){.hero-device .scale-demo-screen{border-radius:13px}}
+@media(max-width:540px){#scale .scale-shots>.scale-motion,#scale .scale-phones>.scale-motion{margin-top:0}.scale-demo-actions{margin-top:13px}.scale-demo-toggle{font-size:12px;min-height:42px}}

@@ -8,6 +8,8 @@
   <link rel="icon" href="img/scale/logo.png">
   <link rel="stylesheet" href="css/scale.css">
   <script src="js/scale.js" defer></script>
+  <link rel="stylesheet" href="css/scale-demo.css">
+  <script src="js/scale-demo.js" defer></script>
 </head>
 <body>
 <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
@@ -35,12 +37,13 @@
           <span class="shot-label">Organize a equipe</span>
           <div class="phone-shell"><div class="phone-top" aria-hidden="true"><span class="phone-speaker"></span><span class="phone-camera"></span></div><button class="shot-button" type="button" data-zoom="img/scale/conta-real/escala-resumo.webp" data-caption="Escala · data, horário e equipe no Automate Scale" aria-label="Ampliar tela da escala"><img src="img/scale/conta-real/escala-resumo.webp" alt="Resumo da escala no celular com data, horário e equipe" width="390" height="844" loading="lazy"></button><div class="phone-bottom" aria-hidden="true"><span></span></div></div>
         </div>
-        <div class="hero-device hero-device--player">
+        <div class="hero-device hero-device--player" data-scale-demo>
           <span class="shot-label">Estude a sua parte</span>
-          <div class="phone-shell"><div class="phone-top" aria-hidden="true"><span class="phone-speaker"></span><span class="phone-camera"></span></div><button class="shot-button" type="button" data-zoom="img/scale/conta-real/player-faixas.webp" data-caption="Player de estudo · faixas e seções da música no Automate Scale" aria-label="Ampliar tela do player"><img src="img/scale/conta-real/player-faixas.webp" alt="Player do Scale no celular com faixas separadas e o baixo realçado" width="390" height="844" fetchpriority="high"></button><div class="phone-bottom" aria-hidden="true"><span></span></div></div>
+          <div class="phone-shell"><div class="phone-top" aria-hidden="true"><span class="phone-speaker"></span><span class="phone-camera"></span></div><div class="phone-screen scale-demo-screen"><img class="scale-demo-poster" src="img/scale/conta-real/player-faixas.webp" alt="Demonstração do player Scale no celular: faixas separadas, mixer e letra" width="390" height="844" loading="lazy"><video id="scale-player-demo" class="scale-demo-video" width="390" height="844" poster="img/scale/conta-real/player-faixas.webp" data-src="media/scale/player-demo.mp4" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video></div><div class="phone-bottom" aria-hidden="true"><span></span></div></div>
+          <div class="scale-demo-actions"><button class="scale-demo-toggle" type="button" aria-controls="scale-player-demo" hidden><span class="scale-demo-icon" aria-hidden="true">▶</span><span class="scale-demo-label">Reproduzir demonstração</span></button><span class="scale-demo-status" role="status"></span></div>
         </div>
       </div>
-      <figcaption>Automate Scale no celular · toque nas telas para ampliar</figcaption>
+      <figcaption>Player em ação · gravação real, sem áudio</figcaption>
     </figure>
   </section>
   <div class="wrap chapterbar" aria-label="Explore o aplicativo">

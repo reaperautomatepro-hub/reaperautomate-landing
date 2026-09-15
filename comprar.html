@@ -1022,6 +1022,8 @@
   .hero-price b { color:var(--accent); font-weight:600; }
 </style>
 <link rel="stylesheet" href="css/scale-phone-embeds.css">
+<link rel="stylesheet" href="css/scale-demo.css">
+<script src="js/scale-demo.js" defer></script>
 </head>
 <body>
 
@@ -1700,7 +1702,7 @@
     <div class="scale-layout">
       <div class="scale-phones">
         <div class="phone-shell scale-phone"><div class="phone-top" aria-hidden="true"><span class="phone-speaker"></span><span class="phone-camera"></span></div><div class="phone-screen"><img src="img/scale/conta-real/escala-resumo.webp" alt="Resumo da escala no celular com data, horário e equipe" width="390" height="844" loading="lazy" /></div><div class="phone-bottom" aria-hidden="true"><span></span></div></div>
-        <div class="phone-shell scale-phone up"><div class="phone-top" aria-hidden="true"><span class="phone-speaker"></span><span class="phone-camera"></span></div><div class="phone-screen"><img src="img/scale/conta-real/player-faixas.webp" alt="Player multipista do Automate Scale com as faixas de Estações" width="390" height="844" loading="lazy" /></div><div class="phone-bottom" aria-hidden="true"><span></span></div></div>
+        <div class="scale-motion" data-scale-demo><div class="phone-shell scale-phone"><div class="phone-top" aria-hidden="true"><span class="phone-speaker"></span><span class="phone-camera"></span></div><div class="phone-screen scale-demo-screen"><img class="scale-demo-poster" src="img/scale/conta-real/player-faixas.webp" alt="Demonstração do player Scale no celular: faixas separadas, mixer e letra" width="390" height="844" loading="lazy"><video id="scale-player-demo" class="scale-demo-video" width="390" height="844" poster="img/scale/conta-real/player-faixas.webp" data-src="media/scale/player-demo.mp4" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video></div><div class="phone-bottom" aria-hidden="true"><span></span></div></div><div class="scale-demo-actions"><button class="scale-demo-toggle" type="button" aria-controls="scale-player-demo" hidden><span class="scale-demo-icon" aria-hidden="true">▶</span><span class="scale-demo-label">Reproduzir demonstração</span></button><span class="scale-demo-status" role="status"></span></div></div>
       </div>
 
       <div class="scale-feats">
